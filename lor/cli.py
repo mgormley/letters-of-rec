@@ -14,8 +14,7 @@ from pathlib import Path
 import click
 from dotenv import load_dotenv
 
-from lor.file_utils import find_docx_files
-from lor.redact_student_info import process_document
+from lor.redact_student_info import process_all
 
 # Load environment variables
 load_dotenv()
@@ -65,43 +64,19 @@ def redact(path):
 
         lor redact ./letters/ --dry-run
     """
-    # Validate path
-    input_path = Path(path).resolve()
-    if not input_path.exists():
-        click.echo(f"Error: Path '{path}' does not exist", err=True)
-        sys.exit(1)
+    try:
+        success_count, failure_count = process_all(path)
 
-    # Find all .docx files
-    docx_files = find_docx_files(input_path)
-    if not docx_files:
-        click.echo("Error: No .docx files found to process", err=True)
-        sys.exit(1)
+        # Display colored summary for CLI
+        click.echo("")  # Add blank line before summary
+        click.secho(f"Successful: {success_count}", fg='green' if success_count > 0 else None)
+        click.secho(f"Failed: {failure_count}", fg='red' if failure_count > 0 else None)
 
-    # Process each document
-    logger.info(f"\nProcessing {len(docx_files)} document(s)...")
-    success_count = 0
-    failure_count = 0
+        if failure_count > 0:
+            sys.exit(1)
 
-    with click.progressbar(
-        docx_files,
-        label='Processing documents',
-        item_show_func=lambda x: x.name if x else ''
-    ) as bar:
-        for docx_file in bar:
-            if process_document(docx_file):
-                success_count += 1
-            else:
-                failure_count += 1
-
-    # Summary
-    click.echo("\n" + "="*60)
-    click.echo("SUMMARY")
-    click.echo("="*60)
-    click.echo(f"Total files: {len(docx_files)}")
-    click.secho(f"Successful: {success_count}", fg='green' if success_count > 0 else None)
-    click.secho(f"Failed: {failure_count}", fg='red' if failure_count > 0 else None)
-
-    if failure_count > 0:
+    except (FileNotFoundError, ValueError) as e:
+        click.echo(f"Error: {e}", err=True)
         sys.exit(1)
 
 

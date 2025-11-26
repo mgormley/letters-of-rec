@@ -14,10 +14,10 @@ This module now serves as a high-level orchestrator for the redaction pipeline.
 import os
 import logging
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 from lor.llm import call_llm
 
-from lor.file_utils import save_markdown, convert_docx_to_markdown
+from lor.file_utils import save_markdown, convert_docx_to_markdown, find_docx_files
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +65,7 @@ def process_document(docx_path: Path) -> bool:
 
         # Convert to Markdown
         markdown_text = convert_docx_to_markdown(docx_path)
-        
+
         # Redact student information
         redactor = DocumentRedactor()
         redacted_text = redactor.redact_text(markdown_text)
@@ -80,4 +80,50 @@ def process_document(docx_path: Path) -> bool:
     except Exception as e:
         logger.error(f"✗ Failed to process {docx_path.name}: {e}")
         return False
+
+
+def process_all(path: str) -> Tuple[int, int]:
+    """
+    Process all .docx files in the given path (file or directory).
+
+    Args:
+        path: Path to a .docx file or directory containing .docx files
+
+    Returns:
+        Tuple of (success_count, failure_count)
+
+    Raises:
+        FileNotFoundError: If the path does not exist
+        ValueError: If no .docx files are found
+    """
+    # Validate path
+    input_path = Path(path).resolve()
+    if not input_path.exists():
+        raise FileNotFoundError(f"Path '{path}' does not exist")
+
+    # Find all .docx files
+    docx_files = find_docx_files(input_path)
+    if not docx_files:
+        raise ValueError("No .docx files found to process")
+
+    # Process each document
+    logger.info(f"Processing {len(docx_files)} document(s)...")
+    success_count = 0
+    failure_count = 0
+
+    for docx_file in docx_files:
+        if process_document(docx_file):
+            success_count += 1
+        else:
+            failure_count += 1
+
+    # Log summary
+    logger.info("=" * 60)
+    logger.info("SUMMARY")
+    logger.info("=" * 60)
+    logger.info(f"Total files: {len(docx_files)}")
+    logger.info(f"Successful: {success_count}")
+    logger.info(f"Failed: {failure_count}")
+
+    return success_count, failure_count
 
