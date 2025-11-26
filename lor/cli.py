@@ -64,20 +64,7 @@ def redact(path):
 
         lor redact ./letters/ --dry-run
     """
-    try:
-        success_count, failure_count = process_all(path)
-
-        # Display colored summary for CLI
-        click.echo("")  # Add blank line before summary
-        click.secho(f"Successful: {success_count}", fg='green' if success_count > 0 else None)
-        click.secho(f"Failed: {failure_count}", fg='red' if failure_count > 0 else None)
-
-        if failure_count > 0:
-            sys.exit(1)
-
-    except (FileNotFoundError, ValueError) as e:
-        click.echo(f"Error: {e}", err=True)
-        sys.exit(1)
+    process_all(path)
 
 
 if __name__ == '__main__':

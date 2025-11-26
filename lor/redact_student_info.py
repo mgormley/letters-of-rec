@@ -58,28 +58,20 @@ Document to redact:
 
 def process_document(docx_path: Path) -> bool:
     """Process a single document: convert, redact, and save."""
-    try:
-        logger.info(f"\n{'='*60}")
-        logger.info(f"Processing: {docx_path}")
-        logger.info(f"{'='*60}")
+    logger.info(f"\n{'='*60}")
+    logger.info(f"Processing: {docx_path}")
+    logger.info(f"{'='*60}")
 
-        # Convert to Markdown
-        markdown_text = convert_docx_to_markdown(docx_path)
+    # Convert to Markdown
+    markdown_text = convert_docx_to_markdown(docx_path)
 
-        # Redact student information
-        redactor = DocumentRedactor()
-        redacted_text = redactor.redact_text(markdown_text)
+    # Redact student information
+    redactor = DocumentRedactor()
+    redacted_text = redactor.redact_text(markdown_text)
 
-        # Save to .md file
-        output_path = docx_path.with_suffix('.md')
-        save_markdown(redacted_text, output_path)
-
-        logger.info(f"✓ Successfully processed {docx_path.name}")
-        return True
-
-    except Exception as e:
-        logger.error(f"✗ Failed to process {docx_path.name}: {e}")
-        return False
+    # Save to .md file
+    output_path = docx_path.with_suffix('.md')
+    save_markdown(redacted_text, output_path)
 
 
 def process_all(path: str) -> Tuple[int, int]:
@@ -108,22 +100,7 @@ def process_all(path: str) -> Tuple[int, int]:
 
     # Process each document
     logger.info(f"Processing {len(docx_files)} document(s)...")
-    success_count = 0
-    failure_count = 0
-
     for docx_file in docx_files:
-        if process_document(docx_file):
-            success_count += 1
-        else:
-            failure_count += 1
+        process_document(docx_file)
 
-    # Log summary
-    logger.info("=" * 60)
-    logger.info("SUMMARY")
-    logger.info("=" * 60)
-    logger.info(f"Total files: {len(docx_files)}")
-    logger.info(f"Successful: {success_count}")
-    logger.info(f"Failed: {failure_count}")
-
-    return success_count, failure_count
 
