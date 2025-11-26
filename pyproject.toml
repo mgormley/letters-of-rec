@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "letter-of-rec"
+version = "0.1.0"
+description = "Tools for managing and redacting student information in letters of recommendation"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+packages = [{include = "*.py"}]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+python-docx = "^1.1.2"
+mammoth = "^1.8.0"
+openai = "^1.55.3"
+python-dotenv = "^1.0.1"
+click = "^8.1.7"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+
+[tool.poetry.scripts]
+lor = "cli:cli"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

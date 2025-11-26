@@ -49,14 +49,35 @@ def create_test_document(output_path: Path) -> dict:
     return student_info
 
 
-def test_dry_run(docx_path: Path) -> bool:
+def test_dry_run_cli(docx_path: Path) -> bool:
     """
-    Test the script in dry-run mode (no API calls).
+    Test the CLI in dry-run mode (no API calls).
+    Returns True if successful, False otherwise.
+    """
+    cli_path = Path(__file__).parent.parent / 'cli.py'
+
+    print(f"\n✓ Running CLI redact command in dry-run mode on: {docx_path}")
+    result = subprocess.run(
+        [sys.executable, str(cli_path), 'redact', str(docx_path), '--dry-run'],
+        capture_output=True,
+        text=True
+    )
+
+    print(result.stdout)
+    if result.stderr:
+        print("STDERR:", result.stderr, file=sys.stderr)
+
+    return result.returncode == 0
+
+
+def test_dry_run_script(docx_path: Path) -> bool:
+    """
+    Test the standalone script in dry-run mode (no API calls).
     Returns True if successful, False otherwise.
     """
     script_path = Path(__file__).parent.parent / 'redact_student_info.py'
 
-    print(f"\n✓ Running redaction script in dry-run mode on: {docx_path}")
+    print(f"\n✓ Running standalone script in dry-run mode on: {docx_path}")
     result = subprocess.run(
         [sys.executable, str(script_path), str(docx_path), '--dry-run'],
         capture_output=True,
@@ -143,16 +164,22 @@ def main():
             print("\n✗ TEST FAILED: Conversion test failed")
             sys.exit(1)
 
-        # Step 3: Test script in dry-run mode
-        print("\n[3/3] Testing script execution (dry-run mode)...")
-        if not test_dry_run(docx_path):
+        # Step 3: Test CLI in dry-run mode
+        print("\n[3/4] Testing CLI execution (dry-run mode)...")
+        if not test_dry_run_cli(docx_path):
+            print("\n✗ TEST FAILED: CLI execution failed")
+            sys.exit(1)
+
+        # Step 4: Test standalone script in dry-run mode
+        print("\n[4/4] Testing standalone script execution (dry-run mode)...")
+        if not test_dry_run_script(docx_path):
             print("\n✗ TEST FAILED: Script execution failed")
             sys.exit(1)
 
         print("\n" + "="*60)
         print("✓ ALL TESTS PASSED")
         print("="*60)
-        print("\nThe script is ready to use!")
+        print("\nBoth CLI and standalone script are ready to use!")
         print("To test with actual redaction, set OPENAI_API_KEY and run:")
         print("  python3 tests/test_redaction.py")
 

@@ -18,11 +18,17 @@ A Python script that automatically redacts student-identifying information from 
 
 ## Installation
 
+### Prerequisites
+- Python 3.7 or higher
+- [Poetry](https://python-poetry.org/docs/#installation) (recommended) or pip
+
+### Using Poetry (Recommended)
+
 1. Clone or download this repository
 
-2. Install required dependencies:
+2. Install dependencies with Poetry:
 ```bash
-pip install -r requirements.txt
+poetry install
 ```
 
 3. Set up your OpenAI API key:
@@ -34,45 +40,71 @@ cp .env.example .env
 # Get your API key from: https://platform.openai.com/api-keys
 ```
 
+### Using pip (Alternative)
+
+If you prefer not to use Poetry:
+
+1. Clone or download this repository
+
+2. Install dependencies:
+```bash
+pip install python-docx mammoth openai python-dotenv click
+```
+
+3. Set up your OpenAI API key (same as above)
+
 ## Usage
 
-### Basic Usage
+This tool provides two interfaces:
+1. **CLI tool** (`lor` command) - Recommended, supports multiple subcommands
+2. **Standalone script** (`redact_student_info.py`) - Direct script execution
 
-Process a single file:
+### CLI Usage (Recommended)
+
+After installing with Poetry, you can use the `lor` command:
+
 ```bash
+# Process a single file
+lor redact letter.docx
+
+# Process all .docx files in a directory recursively
+lor redact ./letters/
+
+# Use a specific OpenAI model
+lor redact ./letters/ --model gpt-4-turbo
+
+# Pass API key directly
+lor redact letter.docx --api-key YOUR_API_KEY
+
+# Dry run (preview without making changes)
+lor redact ./letters/ --dry-run
+
+# Enable verbose logging
+lor redact ./letters/ --verbose
+
+# View help
+lor --help
+lor redact --help
+```
+
+If using Poetry without installing globally:
+```bash
+poetry run lor redact letter.docx
+```
+
+### Standalone Script Usage
+
+You can also run the script directly:
+
+```bash
+# Process a single file
 python redact_student_info.py letter.docx
-```
 
-Process all `.docx` files in a directory recursively:
-```bash
+# Process a directory
 python redact_student_info.py ./letters/
-```
 
-### Advanced Options
-
-Use a specific OpenAI model:
-```bash
-python redact_student_info.py ./letters/ --model gpt-4-turbo
-```
-
-Pass API key directly (instead of using `.env`):
-```bash
-python redact_student_info.py letter.docx --api-key YOUR_API_KEY
-```
-
-Dry run (preview without making changes):
-```bash
-python redact_student_info.py ./letters/ --dry-run
-```
-
-Enable verbose logging:
-```bash
-python redact_student_info.py ./letters/ --verbose
-```
-
-View help:
-```bash
-python redact_student_info.py --help
+# With options
+python redact_student_info.py ./letters/ --model gpt-4-turbo --dry-run
 ```
 
 ## How It Works
@@ -102,11 +134,12 @@ letters/
 
 - Python 3.7+
 - OpenAI API key
-- Dependencies listed in `requirements.txt`:
+- Dependencies (managed by Poetry or installed manually):
   - `python-docx` - Reading Word documents
   - `mammoth` - Converting Word to Markdown
   - `openai` - OpenAI API client
   - `python-dotenv` - Environment variable management
+  - `click` - CLI framework
 
 ## Security Notes
 
