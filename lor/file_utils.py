@@ -13,11 +13,15 @@ import mammoth
 logger = logging.getLogger(__name__)
 
 def convert_docx_to_markdown(docx_path: Path) -> str:
-    """Convert a Word document to Markdown format."""
+    """Convert a Word document to Markdown format, dropping all images."""
     try:
         logger.info(f"Converting {docx_path.name} to Markdown...")
         with open(docx_path, 'rb') as docx_file:
-            result = mammoth.convert_to_markdown(docx_file)
+            # Configure mammoth to ignore images by returning empty strings
+            result = mammoth.convert_to_markdown(
+                docx_file,
+                convert_image=mammoth.images.inline(lambda image: {"alt": ""})
+            )
             markdown_text = result.value
 
             # Log any conversion warnings
@@ -25,7 +29,7 @@ def convert_docx_to_markdown(docx_path: Path) -> str:
                 for message in result.messages:
                     logger.debug(f"Conversion message: {message}")
 
-            logger.info(f"Successfully converted {docx_path.name} to Markdown")
+            logger.info(f"Successfully converted {docx_path.name} to Markdown (images dropped)")
             return markdown_text
 
     except Exception as e:
