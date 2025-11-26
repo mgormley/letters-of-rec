@@ -19,9 +19,7 @@ letter_of_rec/
 │   ├── original_letters/           # Original .docx letters (PRIVATE)
 │   ├── redacted_letters/           # Redacted .md letters (for style analysis)
 │   ├── style_guide/                # Generated style documentation
-│   │   ├── style_guide.md          # Overall writing style guide
-│   │   ├── structure_patterns.md   # Common letter structures
-│   │   └── example_excerpts.md     # Anonymized example phrases/paragraphs
+│   │   └── style_guide.md          # Overall writing style guide
 │   │
 │   └── students/                   # Student-specific folders (PRIVATE)
 │       └── [student_name]/
@@ -30,6 +28,7 @@ letter_of_rec/
 │           │   ├── transcript.pdf
 │           │   ├── accomplishments.txt
 │           │   └── personal_statement.pdf
+|           ├── markdown/           # input/ files converted to markdown
 │           ├── student_packet.md   # Synthesized student information
 │           └── output/
 │               ├── letter_draft.md
@@ -59,7 +58,7 @@ Extract your writing style from historical letters without cross-contaminating s
 
 1. **Redact Historical Letters**
    ```bash
-   lor redact data/original_letters/ --model gpt-4
+   lor redact data/original_letters/ 
    ```
    - Converts .docx → Markdown
    - Replaces [STUDENT_NAME], [STUDENT_ID], [STUDENT_EMAIL], etc.
@@ -72,7 +71,7 @@ Extract your writing style from historical letters without cross-contaminating s
 
    **What this produces:**
 
-   a) **style_guide.md** - Core writing patterns:
+   a) **Style Guide** - Core writing patterns:
       - Sentence structure preferences (e.g., compound vs. simple sentences)
       - Vocabulary level and technical terminology usage
       - Tone (formal, warm, enthusiastic, measured)
@@ -80,14 +79,14 @@ Extract your writing style from historical letters without cross-contaminating s
       - How you emphasize strengths
       - How you contextualize weaknesses (if at all)
 
-   b) **structure_patterns.md** - Letter organization:
+   b) **Structure Patterns** - Letter organization:
       - Opening paragraph templates
       - Body paragraph organization (chronological, thematic, etc.)
       - How you integrate different types of evidence (grades, TA work, research)
       - Closing paragraph patterns
       - Length guidelines (words per section)
 
-   c) **example_excerpts.md** - Reusable phrases:
+   c) **Example Excerpts** - Reusable phrases:
       - Opening lines (e.g., "I am writing to enthusiastically recommend...")
       - Transition phrases
       - Ways to describe teaching assistant work
@@ -97,7 +96,6 @@ Extract your writing style from historical letters without cross-contaminating s
 
 ### Key Considerations
 
-- **Multiple passes**: Run style extraction separately for MS vs PhD letters if patterns differ
 - **Version control**: Keep style guide in git to track refinements
 - **Manual review**: Review and edit the generated style guide to ensure accuracy
 - **Privacy**: Redacted letters should have NO identifying information
@@ -113,7 +111,7 @@ Consolidate all student materials into a single, structured Markdown document th
 
 Students provide:
 1. **Resume** (PDF/DOCX)
-2. **Unofficial Transcript** + grade permission
+2. **Unofficial Transcript**
 3. **Accomplishments List** (bulleted, in their words)
 4. **Personal Statement** (for program they're applying to)
 
@@ -124,25 +122,15 @@ Students provide:
    mkdir -p data/students/jane_smith/input
    # Student uploads files to input/ folder
    ```
-
-2. **Convert Documents to Text**
+2. **Synthesize Student Packet (Auto-Generated)**
    ```bash
-   lor convert data/students/jane_smith/input/ --output-format markdown
+   lor synthesize-packet data/students/jane_smith/ 
    ```
    - Handles PDF, DOCX → Markdown
    - Preserves structure (headings, lists, etc.)
+   - This creates a student packet with auto-populated sections (a-e) from student materials.
 
-3. **Synthesize Student Packet (Auto-Generated)**
-   ```bash
-   lor synthesize-packet data/students/jane_smith/ \
-       --courses "10-301, 10-601" \
-       --role "Teaching Assistant" \
-       --letter-type phd
-   ```
-
-   This creates a student packet with auto-populated sections (a-e) from student materials.
-
-4. **Add Professor's Perspective (Manual)**
+3. **Add Professor's Perspective (Manual)**
    - Open `data/students/jane_smith/student_packet.md`
    - Review auto-generated sections
    - Write the "Strengths from Professor's Perspective" section
@@ -171,9 +159,8 @@ Students provide:
       - Technical contributions
       - Results (papers, code, etc.)
 
-   e) **Program Fit** (from personal statement)
-      - Target program and institution
-      - Career goals and research interests
+   e) **Match of Goals and Experience** (from personal statement)
+      - Career goals and research / teaching interests
 
    f) **Strengths from Professor's Perspective** (manually written by you)
       - Your personal observations and assessments
@@ -249,9 +236,9 @@ Students provide:
 - Co-author on paper submitted to NeurIPS 2024
 - Code released as open-source library with 200+ GitHub stars
 
-## Program Fit
+## Match of Goals and Experience
 
-**Target Program:** PhD in Machine Learning, Stanford University
+**Target Program:** PhD in Machine Learning
 
 **Career Goals:** (from personal statement)
 - Research scientist in industry or academia
@@ -292,7 +279,7 @@ Jane is among the top 5% of students I have worked with and is ready for PhD-lev
 - **No hallucination**: If information isn't in source materials, mark as [TO_VERIFY] or omit
 - **Structured format**: Use consistent headings for easy extraction during letter generation
 - **Specificity**: Include concrete examples from student's accomplishments list
-- **Length**: Aim for 800-1200 words (excluding professor's section) - much shorter than previous version
+- **Length**: Aim for 800 words (excluding professor's section)
 - **Separation**: Each student packet is completely isolated from others
 - **Professor input required**: The "Strengths from Professor's Perspective" section must be written manually by you after reviewing the auto-generated sections
 
@@ -305,61 +292,47 @@ Generate a complete letter of recommendation by combining style guide, student p
 
 ### Steps
 
-1. **Generate Letter Draft**
-   ```bash
-   lor generate-letter data/students/jane_smith/ \
-       --program "PhD, Stanford, Machine Learning" \
-       --length 600 \
-       --model gpt-4
-   ```
+**Generate Letter Draft**
+```bash
+lor generate-letter data/students/jane_smith/ 
+```
+- Output as Markdown
+- Then convert to docx
 
-   **LLM Context Structure** (optimized for token efficiency):
+**LLM Context Structure** (optimized for token efficiency):
 
-   ```
-   [SYSTEM PROMPT]
-   You are writing a letter of recommendation on behalf of Professor Matt Gormley.
-   Write in his style, using the style guide and examples provided.
+```
+[SYSTEM PROMPT]
+You are writing a letter of recommendation on behalf of Professor Matt Gormley.
+Write in his style, using the style guide and examples provided.
 
-   [STYLE GUIDE] (2000 tokens)
-   [Include key sections from style_guide.md and structure_patterns.md]
+[STYLE GUIDE] (2000 tokens)
+[Include key sections from style_guide.md and structure_patterns.md]
 
-   [EXAMPLE EXCERPTS] (1000 tokens)
-   [Select relevant examples from example_excerpts.md]
+[EXAMPLE EXCERPTS] (1000 tokens)
+[Select relevant examples from example_excerpts.md]
 
-   [STUDENT PACKET] (3000 tokens)
-   [Full student_packet.md]
+[STUDENT PACKET] (3000 tokens)
+[Full student_packet.md]
 
-   [INSTRUCTIONS] (500 tokens)
-   Write a letter of recommendation for [STUDENT_NAME] applying to:
-   - Program: PhD in Machine Learning
-   - Institution: Stanford University
+[INSTRUCTIONS] (500 tokens)
+Write a letter of recommendation for [STUDENT_NAME] applying to:
+- Program: PhD in Machine Learning
+- Institution: Stanford University
 
-   Letter requirements:
-   - Length: ~600 words (2 pages)
-   - Focus areas: Research potential, TA effectiveness, academic strength
-   - Tone: Enthusiastic but measured
-   - Structure: Opening (relationship), Body (evidence), Closing (recommendation strength)
+Letter requirements:
+- Length: ~500 words (1.5 pages)
+- Focus areas: Research potential, TA effectiveness, academic strength
+- Tone: Enthusiastic but measured
+- Structure: Opening (relationship), Body (evidence), Closing (recommendation strength)
 
-   Key points to emphasize:
-   1. Research contributions and independence
-   2. Teaching effectiveness and student impact
-   3. Technical depth and breadth
+Key points to emphasize:
+1. Research contributions and independence
+2. Teaching effectiveness and student impact
+3. Technical depth and breadth
 
-   Output format: Markdown
-   ```
-
-2. **Review and Refine**
-   ```bash
-   # Human reviews letter_draft.md
-   # Makes edits as needed
-   ```
-
-3. **Convert to DOCX**
-   ```bash
-   lor convert-to-docx data/students/jane_smith/output/letter_draft.md \
-       --template letterhead \
-       --output letter_final.docx
-   ```
+Output format: Markdown
+```
 
 ### Letter Structure Template
 
@@ -421,48 +394,6 @@ Professor Matt Gormley
 - **Program-specific**: Tailor emphasis to PhD vs MS, research vs industry programs
 - **Length discipline**: Stay within typical bounds (500-700 words)
 - **Proofread carefully**: LLMs can generate grammatical errors or awkward phrasings
-
----
-
-## Phase 4: Quality Control & Iteration
-
-### Validation Checklist
-
-Before sending any letter, verify:
-
-- [ ] All factual claims are accurate (cross-check with student packet)
-- [ ] No hallucinated details (courses, grades, accomplishments)
-- [ ] Writing style matches your voice
-- [ ] No generic or cliché phrases
-- [ ] Appropriate recommendation strength
-- [ ] No identifying information from other students
-- [ ] Proper formatting and structure
-- [ ] Contact information correct
-- [ ] Date and addressee correct
-- [ ] Letter is program-appropriate
-
-### Iterative Refinement
-
-If letter quality is unsatisfactory:
-
-1. **First iteration**: Edit specific sections manually
-2. **Second iteration**: Regenerate with more specific instructions
-   ```bash
-   lor generate-letter data/students/jane_smith/ \
-       --program "PhD, Stanford, Machine Learning" \
-       --focus "research,independence,technical_depth" \
-       --avoid "generic_phrases" \
-       --regenerate "body_paragraph_3"
-   ```
-3. **Style guide update**: If systematic issues, update style guide and regenerate
-
-### Feedback Loop
-
-After each letter generation:
-- Note what worked well / what didn't
-- Update prompts or style guide if patterns emerge
-- Track time savings vs manual writing
-- Collect any new example phrases for style guide
 
 ---
 
@@ -534,145 +465,3 @@ After each letter generation:
 - Regular cleanup of old student data
 - Explicit instructions to students about data handling
 
----
-
-## Implementation Roadmap
-
-### Milestone 1: Setup & Redaction ✓
-- [x] Poetry project structure
-- [x] CLI framework with Click
-- [x] Redaction subcommand working
-- [ ] Collect 10-20 historical letters (diverse: MS, PhD, TA, research)
-- [ ] Redact all historical letters
-
-### Milestone 2: Style Extraction
-- [ ] Create `lor extract-style` subcommand
-- [ ] Implement style guide generation prompt
-- [ ] Implement structure pattern extraction
-- [ ] Implement example excerpt extraction
-- [ ] Generate initial style guide
-- [ ] Manual review and refinement
-
-### Milestone 3: Student Packet Synthesis
-- [ ] Create `lor convert` subcommand (PDF/DOCX → Markdown)
-- [ ] Create `lor synthesize-packet` subcommand
-- [ ] Design student packet template
-- [ ] Implement synthesis prompt
-
-### Milestone 4: Letter Generation
-- [ ] Create `lor generate-letter` subcommand
-- [ ] Design letter generation prompt
-- [ ] Implement context assembly (style + packet + instructions)
-
-### Milestone 5: Conversion & Formatting
-- [ ] Create `lor convert-to-docx` subcommand
-- [ ] Implement Markdown → DOCX conversion with formatting
-- [ ] Create letterhead template
-
-### Milestone 6: End-to-End Testing
-- [ ] Test with 2-3 real student datasets (anonymized)
-- [ ] Generate 2-3 test letters
-- [ ] Compare generated letters with hand-written letters
-- [ ] Refine packet structure based on testing results
-- [ ] Iterate on prompts and style guide
-- [ ] Test output formatting
-- [ ] Validate full workflow
-
-### Milestone 7: Production Use
-- [ ] Create end-to-end documentation
-- [ ] Generate first production letter
-- [ ] Establish feedback/improvement process
-- [ ] Document time savings and quality metrics
-
----
-
-## Example Commands (Full Workflow)
-
-```bash
-# One-time setup: Extract your writing style
-lor redact data/original_letters/ --output data/redacted_letters/
-lor extract-style data/redacted_letters/ --output data/style_guide/
-
-# Per student: Generate a letter
-# 1. Student provides materials → data/students/jane_smith/input/
-
-# 2. Convert to markdown
-lor convert data/students/jane_smith/input/
-
-# 3. Auto-generate student packet
-lor synthesize-packet data/students/jane_smith/ \
-    --courses "10-301, 10-601" \
-    --role "TA, Research Assistant" \
-    --letter-type phd
-
-# 4. MANUAL: Edit data/students/jane_smith/student_packet.md
-#    Add "Strengths from Professor's Perspective" section
-
-# 5. Generate letter
-lor generate-letter data/students/jane_smith/ \
-    --program "PhD, Stanford, Machine Learning" \
-    --length 600
-
-# 6. Review data/students/jane_smith/output/letter_draft.md
-#    Make any edits needed
-
-# 7. Convert to DOCX
-lor convert-to-docx data/students/jane_smith/output/letter_draft.md
-
-# 8. Final review and send letter_final.docx
-```
-
----
-
-## Estimated Time Savings
-
-### Traditional Process (Manual)
-- Initial draft: 60-90 minutes
-- Revision: 15-30 minutes
-- **Total: 75-120 minutes per letter**
-
-### LLM-Assisted Process
-- Setup (per student): 5 minutes (organize files)
-- Synthesis: 2 minutes (automated)
-- Generation: 2 minutes (automated)
-- Review & editing: 15-30 minutes
-- **Total: 25-40 minutes per letter**
-
-**Time savings: 50-80 minutes per letter (60-70% reduction)**
-
-With 20 letters per year: **16-26 hours saved annually**
-
----
-
-## Success Metrics
-
-Track these metrics over first 10 letters:
-
-1. **Time per letter** (setup + review + editing)
-2. **Edit distance** (how much manual editing required)
-3. **Factual errors** (hallucinations caught in review)
-4. **Style consistency** (subjective 1-5 rating)
-5. **Recipient feedback** (if available)
-6. **Reuse of style guide** (needed updates or stable)
-
-Target goals after refinement:
-- < 30 minutes per letter
-- < 20% of content manually edited
-- Zero factual errors
-- 4/5+ style consistency
-- Style guide stable (no major updates needed)
-
----
-
-## Next Steps
-
-1. Collect and redact 10-20 historical letters
-2. Implement `extract-style` subcommand
-3. Test style extraction on redacted letters
-4. Review and manually refine generated style guide
-5. Implement `synthesize-packet` subcommand
-6. Test with 1-2 real student datasets
-7. Implement `generate-letter` subcommand
-8. Generate and review first test letter
-9. Iterate based on results
-10. Document any additional refinements needed

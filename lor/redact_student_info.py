@@ -56,8 +56,16 @@ Document to redact:
         logger.info("Successfully received redacted text from LLM")
         return redacted_text
 
-def process_document(docx_path: Path) -> bool:
-    """Process a single document: convert, redact, and save."""
+def process_document(docx_path: Path, out_dir: Path) -> bool:
+    """Process a single document: convert, redact, and save.
+
+    Args:
+        docx_path: Path to the input .docx file
+        out_dir: Directory where the output .md file will be saved
+
+    Returns:
+        True if successful, False otherwise
+    """
     logger.info(f"\n{'='*60}")
     logger.info(f"Processing: {docx_path}")
     logger.info(f"{'='*60}")
@@ -69,29 +77,32 @@ def process_document(docx_path: Path) -> bool:
     redactor = DocumentRedactor()
     redacted_text = redactor.redact_text(markdown_text)
 
-    # Save to .md file
-    output_path = docx_path.with_suffix('.md')
+    # Save to .md file in output directory with same basename
+    output_filename = docx_path.stem + '.md'
+    output_path = out_dir / output_filename
     save_markdown(redacted_text, output_path)
 
 
-def process_all(path: str) -> Tuple[int, int]:
+def process_all(in_path: str, out_dir: str) -> Tuple[int, int]:
     """
     Process all .docx files in the given path (file or directory).
 
     Args:
-        path: Path to a .docx file or directory containing .docx files
+        in_path: Path to a .docx file or directory containing .docx files
+        out_path: Directory where redacted .md files will be saved
 
     Returns:
         Tuple of (success_count, failure_count)
-
-    Raises:
-        FileNotFoundError: If the path does not exist
-        ValueError: If no .docx files are found
     """
-    # Validate path
-    input_path = Path(path).resolve()
+    # Validate input path
+    input_path = Path(in_path).resolve()
     if not input_path.exists():
-        raise FileNotFoundError(f"Path '{path}' does not exist")
+        raise FileNotFoundError(f"Path '{in_path}' does not exist")
+
+    # Create output directory if it doesn't exist
+    output_dir = Path(out_dir).resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+    logger.info(f"Output directory: {output_dir}")
 
     # Find all .docx files
     docx_files = find_docx_files(input_path)
@@ -101,6 +112,6 @@ def process_all(path: str) -> Tuple[int, int]:
     # Process each document
     logger.info(f"Processing {len(docx_files)} document(s)...")
     for docx_file in docx_files:
-        process_document(docx_file)
+        process_document(docx_file, output_dir)
 
 

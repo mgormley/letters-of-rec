@@ -37,31 +37,30 @@ def cli():
 
 
 @cli.command()
-@click.argument('path', type=click.Path(exists=True))
-def redact(path):
+@click.option('--in-path', default='data/original_letters/', type=click.Path(exists=True), help='Input directory or file containing .docx files')
+@click.option('--out-path', default='data/redacted_letters/', type=click.Path(), help='Output directory for redacted .md files')
+def redact(in_path, out_path):
     """
     Redact student information from Word documents.
 
-    PATH can be either:
+    IN_PATH can be either:
     - A single .docx file
     - A directory (will recursively process all .docx files)
+
+    OUT_PATH is the directory where redacted .md files will be saved.
 
     The script will:
     1. Convert Word documents to Markdown
     2. Use an LLM to identify and redact student information
-    3. Save redacted content as .md files
+    3. Save redacted content as .md files in OUT_PATH
 
     Examples:
 
         lor redact letter.docx
 
         lor redact ./letters/
-
-        lor redact ./letters/ --model gpt-4-turbo
-
-        lor redact ./letters/ --dry-run
     """
-    process_all(path)
+    process_all(in_path, out_path)
 
 
 if __name__ == '__main__':
