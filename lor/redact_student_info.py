@@ -11,10 +11,11 @@ This script:
 This module now serves as a high-level orchestrator for the redaction pipeline.
 """
 
+import os
 import logging
 from pathlib import Path
-from openai import OpenAI
 from typing import Optional
+from lor.llm import call_llm
 
 from lor.file_utils import save_markdown, convert_docx_to_markdown
 
@@ -42,40 +43,50 @@ IMPORTANT:
 Document to redact:
 
 """
-
-    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-5"):
-        """Initialize the redactor with OpenAI API credentials."""
-        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
-        if not self.api_key:
-            raise ValueError("OpenAI API key not found. Set OPENAI_API_KEY environment variable or pass api_key parameter.")
-
-        self.client = OpenAI(api_key=self.api_key)
-        self.model = model
-        logger.info(f"Initialized DocumentRedactor with model: {model}")
-
+    
     def redact_text(self, text: str) -> str:
-        """Use OpenAI API to redact student information from text."""
-        try:
-            logger.info("Sending text to OpenAI for redaction...")
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": "You are a precise document redaction assistant."},
-                    {"role": "user", "content": self.REDACTION_PROMPT + text}
-                ],
-                temperature=0.1  # Low temperature for consistency
-            )
+        """Use an LLM to redact student information from text."""
+        logger.info("Sending text to OpenAI for redaction...")
+        redacted_text = call_llm(
+            messages=[
+                {"role": "system", "content": "You are a precise document redaction assistant."},
+                {"role": "user", "content": self.REDACTION_PROMPT + text}
+            ]
+        )
+        logger.info("Successfully received redacted text from LLM")
+        return redacted_text
 
-            redacted_text = response.choices[0].message.content
-            logger.info("Successfully received redacted text from OpenAI")
-            return redacted_text
+def process_all(path: str):
+    # Validate path
+    input_path = Path(path).resolve()
+    if not input_path.exists():
+        click.echo(f"Error: Path '{path}' does not exist", err=True)
+        sys.exit(1)
 
-        except Exception as e:
-            logger.error(f"Error during OpenAI API call: {e}")
-            raise
+    # Find all .docx files
+    docx_files = find_docx_files(input_path)
+    if not docx_files:
+        click.echo("Error: No .docx files found to process", err=True)
+        sys.exit(1)
+
+    # Process each document
+    logger.info(f"\nProcessing {len(docx_files)} document(s)...")
+    success_count = 0
+    failure_count = 0
+
+    with click.progressbar(
+        docx_files,
+        label='Processing documents',
+        item_show_func=lambda x: x.name if x else ''
+    ) as bar:
+        for docx_file in bar:
+            if process_document(docx_file):
+                success_count += 1
+            else:
+                failure_count += 1
 
 
-def process_document(docx_path: Path, dry_run: bool = False) -> bool:
+def process_document(docx_path: Path) -> bool:
     """Process a single document: convert, redact, and save."""
     try:
         logger.info(f"\n{'='*60}")
@@ -86,19 +97,12 @@ def process_document(docx_path: Path, dry_run: bool = False) -> bool:
         markdown_text = convert_docx_to_markdown(docx_path)
         
         # Redact student information
-        if not dry_run:
-            redactor = DocumentRedactor()
-            redacted_text = redactor.redact_text(markdown_text)
-        else:
-            logger.info("DRY RUN: Skipping OpenAI API call")
-            redacted_text = markdown_text
+        redactor = DocumentRedactor()
+        redacted_text = redactor.redact_text(markdown_text)
 
         # Save to .md file
         output_path = docx_path.with_suffix('.md')
-        if not dry_run:
-            save_markdown(redacted_text, output_path)
-        else:
-            logger.info(f"DRY RUN: Would save to {output_path}")
+        save_markdown(redacted_text, output_path)
 
         logger.info(f"✓ Successfully processed {docx_path.name}")
         return True

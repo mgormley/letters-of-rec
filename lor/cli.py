@@ -42,9 +42,7 @@ def cli():
 
 @cli.command()
 @click.argument('path', type=click.Path(exists=True))
-@click.option('--dry-run', is_flag=True, help='Preview what would be processed without making API calls')
-@click.option('--verbose', is_flag=True, help='Enable verbose logging')
-def redact(path, dry_run, verbose):
+def redact(path):
     """
     Redact student information from Word documents.
 
@@ -54,7 +52,7 @@ def redact(path, dry_run, verbose):
 
     The script will:
     1. Convert Word documents to Markdown
-    2. Use OpenAI API to identify and redact student information
+    2. Use an LLM to identify and redact student information
     3. Save redacted content as .md files
 
     Examples:
@@ -67,10 +65,6 @@ def redact(path, dry_run, verbose):
 
         lor redact ./letters/ --dry-run
     """
-    # Set logging level
-    if verbose:
-        logger.setLevel(logging.DEBUG)
-
     # Validate path
     input_path = Path(path).resolve()
     if not input_path.exists():
@@ -94,7 +88,7 @@ def redact(path, dry_run, verbose):
         item_show_func=lambda x: x.name if x else ''
     ) as bar:
         for docx_file in bar:
-            if process_document(docx_file, dry_run=dry_run):
+            if process_document(docx_file):
                 success_count += 1
             else:
                 failure_count += 1
