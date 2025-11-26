@@ -14,7 +14,7 @@ from pathlib import Path
 import click
 from dotenv import load_dotenv
 
-from redact_student_info import (
+from lor.redact_student_info import (
     DocumentRedactor,
     find_docx_files,
     process_document,
@@ -45,27 +45,10 @@ def cli():
 
 @cli.command()
 @click.argument('path', type=click.Path(exists=True))
-@click.option(
-    '--api-key',
-    type=str,
-    help='OpenAI API key (can also be set via OPENAI_API_KEY environment variable)'
-)
-@click.option(
-    '--model',
-    type=str,
-    default='gpt-4',
-    help='OpenAI model to use (default: gpt-4)'
-)
-@click.option(
-    '--dry-run',
-    is_flag=True,
-    help='Preview what would be processed without making API calls'
-)
-@click.option(
-    '--verbose',
-    is_flag=True,
-    help='Enable verbose logging'
-)
+@click.option('--api-key', type=str, help='OpenAI API key (can also be set via OPENAI_API_KEY environment variable)')
+@click.option('--model', type=str, default='gpt-4', help='OpenAI model to use (default: gpt-4)')
+@click.option('--dry-run', is_flag=True, help='Preview what would be processed without making API calls')
+@click.option('--verbose', is_flag=True, help='Enable verbose logging')
 def redact(path, api_key, model, dry_run, verbose):
     """
     Redact student information from Word documents.

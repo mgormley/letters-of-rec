@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Tools for managing and redacting student information in letters of recommendation"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
-packages = [{include = "*.py"}]
+packages = [{include = "lor"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -18,7 +18,7 @@ click = "^8.3.1"
 pytest = "^9.0.1"
 
 [tool.poetry.scripts]
-lor = "cli:cli"
+lor = "lor.cli:cli"
 
 [build-system]
 requires = ["poetry-core"]

@@ -54,11 +54,9 @@ def test_dry_run_cli(docx_path: Path) -> bool:
     Test the CLI in dry-run mode (no API calls).
     Returns True if successful, False otherwise.
     """
-    cli_path = Path(__file__).parent.parent / 'cli.py'
-
     print(f"\n✓ Running CLI redact command in dry-run mode on: {docx_path}")
     result = subprocess.run(
-        [sys.executable, str(cli_path), 'redact', str(docx_path), '--dry-run'],
+        [sys.executable, '-m', 'lor.cli', 'redact', str(docx_path), '--dry-run'],
         capture_output=True,
         text=True
     )
@@ -75,11 +73,9 @@ def test_dry_run_script(docx_path: Path) -> bool:
     Test the standalone script in dry-run mode (no API calls).
     Returns True if successful, False otherwise.
     """
-    script_path = Path(__file__).parent.parent / 'redact_student_info.py'
-
     print(f"\n✓ Running standalone script in dry-run mode on: {docx_path}")
     result = subprocess.run(
-        [sys.executable, str(script_path), str(docx_path), '--dry-run'],
+        [sys.executable, '-m', 'lor.redact_student_info', str(docx_path), '--dry-run'],
         capture_output=True,
         text=True
     )
