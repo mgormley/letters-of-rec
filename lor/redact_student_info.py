@@ -22,7 +22,7 @@ from lor.file_utils import save_markdown, convert_docx_to_markdown, find_docx_fi
 logger = logging.getLogger(__name__)
 
 class DocumentRedactor:
-    """Handles document redaction using OpenAI API."""
+    """Handles document redaction using an LLM API."""
 
     REDACTION_PROMPT = """You are a document redaction assistant. Your task is to identify and replace ALL student-identifying information with standardized placeholders.
 
@@ -46,7 +46,7 @@ Document to redact:
     
     def redact_text(self, text: str) -> str:
         """Use an LLM to redact student information from text."""
-        logger.info("Sending text to OpenAI for redaction...")
+        logger.info("Sending text to LLM for redaction...")
         redacted_text = call_llm(
             messages=[
                 {"role": "system", "content": "You are a precise document redaction assistant."},

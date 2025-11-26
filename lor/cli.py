@@ -8,9 +8,6 @@ This CLI provides multiple subcommands for managing letters of recommendation:
 """
 
 import logging
-import sys
-from pathlib import Path
-
 import click
 from dotenv import load_dotenv
 
