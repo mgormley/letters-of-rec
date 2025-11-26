@@ -56,36 +56,6 @@ Document to redact:
         logger.info("Successfully received redacted text from LLM")
         return redacted_text
 
-def process_all(path: str):
-    # Validate path
-    input_path = Path(path).resolve()
-    if not input_path.exists():
-        click.echo(f"Error: Path '{path}' does not exist", err=True)
-        sys.exit(1)
-
-    # Find all .docx files
-    docx_files = find_docx_files(input_path)
-    if not docx_files:
-        click.echo("Error: No .docx files found to process", err=True)
-        sys.exit(1)
-
-    # Process each document
-    logger.info(f"\nProcessing {len(docx_files)} document(s)...")
-    success_count = 0
-    failure_count = 0
-
-    with click.progressbar(
-        docx_files,
-        label='Processing documents',
-        item_show_func=lambda x: x.name if x else ''
-    ) as bar:
-        for docx_file in bar:
-            if process_document(docx_file):
-                success_count += 1
-            else:
-                failure_count += 1
-
-
 def process_document(docx_path: Path) -> bool:
     """Process a single document: convert, redact, and save."""
     try:
