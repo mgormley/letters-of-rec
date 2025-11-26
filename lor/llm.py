@@ -1,4 +1,7 @@
+import litellm
 from litellm import completion
+
+litellm.drop_params = True
 
 def call_llm(
     messages: list,

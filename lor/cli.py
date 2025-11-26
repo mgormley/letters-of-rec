@@ -12,6 +12,7 @@ import click
 from dotenv import load_dotenv
 
 from lor.redact_student_info import process_all
+from lor.extract_style import extract_style_guide
 
 # Load environment variables
 load_dotenv()
@@ -61,6 +62,37 @@ def redact(in_path, out_path):
         lor redact ./letters/
     """
     process_all(in_path, out_path)
+
+
+@cli.command()
+@click.option('--redacted_letters_dir', default='data/redacted_letters/', type=click.Path(exists=True))
+@click.option('--output', default='data/style_guide/', type=click.Path(), help='Output directory for style_guide.md')
+def extract_style(redacted_letters_dir, output):
+    """
+    Extract writing style guide from redacted letters.
+
+    REDACTED_LETTERS_DIR should contain .md files with redacted student information
+    (typically created by the 'redact' command).
+
+    The script will:
+    1. Load all .md files from the directory
+    2. Analyze writing patterns using an LLM
+    3. Generate a comprehensive style guide
+    4. Save as style_guide.md in OUTPUT directory
+
+    The generated style guide captures:
+    - Writing style characteristics (tone, vocabulary, sentence structure)
+    - Letter structure patterns (opening, body, closing)
+    - Example excerpts (reusable phrases with placeholders)
+
+    Examples:
+
+        lor extract-style data/redacted_letters/
+
+        lor extract-style data/redacted_letters/ --output custom_output/
+    """
+    from pathlib import Path
+    extract_style_guide(Path(redacted_letters_dir), Path(output))
 
 
 if __name__ == '__main__':

@@ -1,20 +1,50 @@
-# Student Information Redaction Tool
+# Letter of Recommendation Generation System
 
-A Python script that automatically redacts student-identifying information from Word documents using OpenAI's GPT models. The script converts `.docx` files to Markdown format and intelligently identifies and replaces student names, IDs, emails, and other personal information with standardized placeholders.
+A comprehensive system for generating personalized letters of recommendation using LLMs while maintaining strict separation between student data and capturing your authentic writing style.
+
+The system consists of three phases:
+1. **Phase 1: Style Extraction** - Extract your writing style from historical letters (one-time setup)
+2. **Phase 2: Student Packet Synthesis** - Consolidate student materials into structured documents (per student)
+3. **Phase 3: Letter Generation** - Generate personalized letters combining style and student data (per student, per program)
+
+Current Status: **Phase 1 Complete**
+
+## Quick Start - Phase 1
+
+Phase 1 is a one-time setup to extract your writing style from historical letters:
+
+```bash
+# 1. Place your original .docx letters in data/original_letters/
+# 2. Redact student information
+python3 -m lor.cli redact data/original_letters/
+
+# 3. Extract your writing style
+python3 -m lor.cli extract-style data/redacted_letters/
+
+# 4. Review and edit data/style_guide/style_guide.md
+```
+
+**Note**: If you don't have an API key set up, see the [Installation](#installation) section below. You can test without an API key using the mock test: `python3 test_phase1_manual.py`
 
 ## Features
 
+### Phase 1: Style Extraction
+- **Redaction**: Automatically redacts student-identifying information from Word documents
+- **Style Analysis**: Uses LLM to extract writing patterns, structure, and voice from redacted letters
+- **Privacy-Focused**: Ensures no student information contaminates the style guide
+- **Comprehensive Style Guide**: Captures sentence structure, vocabulary, tone, common phrases, and letter organization
+
+### Document Processing
 - Processes single `.docx` files or recursively scans directories
 - Converts Word documents to clean Markdown format
-- Uses OpenAI GPT models for intelligent redaction
-- Replaces student information with standardized all-caps placeholders:
+- Uses LLM for intelligent analysis and redaction
+- Replaces student information with standardized placeholders:
   - `[STUDENT_NAME]` - Student names
   - `[STUDENT_ID]` - Student ID numbers
   - `[STUDENT_EMAIL]` - Student email addresses
   - `[STUDENT_INFO]` - Other personal identifiers
 - Preserves document structure and formatting
 - Comprehensive error handling and logging
-- Dry-run mode for preview without API calls
 
 ## Installation
 
@@ -61,35 +91,37 @@ This tool provides two interfaces:
 
 ### CLI Usage (Recommended)
 
-After installing with Poetry, you can use the `lor` command:
+The `lor` command provides multiple subcommands for different phases:
 
+#### Phase 1: Style Extraction (One-Time Setup)
+
+**Step 1: Redact historical letters**
 ```bash
-# Process a single file
-lor redact letter.docx
+# Redact student information from original letters
+python3 -m lor.cli redact data/original_letters/
 
-# Process all .docx files in a directory recursively
-lor redact ./letters/
-
-# Use a specific OpenAI model
-lor redact ./letters/ --model gpt-4-turbo
-
-# Pass API key directly
-lor redact letter.docx --api-key YOUR_API_KEY
-
-# Dry run (preview without making changes)
-lor redact ./letters/ --dry-run
-
-# Enable verbose logging
-lor redact ./letters/ --verbose
-
-# View help
-lor --help
-lor redact --help
+# Output: data/redacted_letters/*.md
 ```
 
-If using Poetry without installing globally:
+**Step 2: Extract writing style**
 ```bash
-poetry run lor redact letter.docx
+# Extract style guide from redacted letters
+python3 -m lor.cli extract-style data/redacted_letters/
+
+# Output: data/style_guide/style_guide.md
+```
+
+**Step 3: Review and refine**
+- Open `data/style_guide/style_guide.md`
+- Review the extracted style patterns
+- Edit to ensure accuracy and completeness
+- Keep in version control for future refinements
+
+#### View Available Commands
+```bash
+python3 -m lor.cli --help
+python3 -m lor.cli redact --help
+python3 -m lor.cli extract-style --help
 ```
 
 ### Standalone Script Usage

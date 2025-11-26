@@ -57,11 +57,10 @@ def find_docx_files(path: Path) -> List[Path]:
 def save_markdown(content: str, output_path: Path) -> None:
     """Save markdown content to a file."""
     try:
-        logger.info(f"Saving content to {output_path}")
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(content)
-        logger.info(f"Successfully saved {output_path}")
+        logger.info(f"Saved content to {output_path}")
 
     except Exception as e:
         logger.error(f"Error saving file {output_path}: {e}")
