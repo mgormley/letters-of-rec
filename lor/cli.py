@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 
 from lor.redact_student_info import process_all
 from lor.extract_style import extract_style_guide
+from lor.synthesize_packet import synthesize_student_packet
 
 # Load environment variables
 load_dotenv()
@@ -93,6 +94,50 @@ def extract_style(redacted_letters_dir, output):
     """
     from pathlib import Path
     extract_style_guide(Path(redacted_letters_dir), Path(output))
+
+
+@cli.command()
+@click.argument('student_dir', type=click.Path(exists=True))
+def synthesize_packet(student_dir):
+    """
+    Synthesize student packet from application materials.
+
+    STUDENT_DIR should be a student-specific directory containing an 'input/'
+    subdirectory with the student's application materials.
+
+    Expected input structure:
+        student_dir/input/
+        ├── resume.pdf (or .docx, .txt)
+        ├── transcript.pdf (or .docx, .txt)
+        ├── accomplishments.txt (or .pdf, .docx)
+        └── statement.pdf (or .docx, .txt)
+
+    The script will:
+    1. Find and convert all materials to markdown (saved in student_dir/markdown/)
+    2. Send materials to LLM for analysis and extraction
+    3. Generate structured student packet (saved as student_dir/student_packet.md)
+
+    The generated packet includes:
+    - Student Profile (metadata)
+    - Academic Performance (from transcript)
+    - Teaching Assistant Work (from accomplishments)
+    - Research Contributions (from accomplishments)
+    - Goals and Experience Alignment (from statement)
+    - Placeholder for Professor's Perspective (to be completed manually)
+
+    After generation, you must:
+    1. Review the auto-generated sections
+    2. Add the "Strengths from Professor's Perspective" section
+    3. Verify all information is accurate
+
+    Examples:
+
+        lor synthesize-packet data/students/jane_smith/
+
+        lor synthesize-packet data/students/john_doe/
+    """
+    from pathlib import Path
+    synthesize_student_packet(Path(student_dir))
 
 
 if __name__ == '__main__':

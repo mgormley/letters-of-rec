@@ -285,10 +285,10 @@ Jane is among the top 5% of students I have worked with and is ready for PhD-lev
 
 ---
 
-## Phase 3: Letter Generation (Per Student, Per Program)
+## Phase 3: Letter Generation (Per Student)
 
 ### Goal
-Generate a complete letter of recommendation by combining style guide, student packet, and program-specific instructions.
+Generate a complete letter of recommendation by combining style guide and student packet.
 
 ### Steps
 
