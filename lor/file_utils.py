@@ -7,7 +7,7 @@ Handles file operations like finding documents, saving files, etc.
 
 import logging
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Optional
 import mammoth
 
 logger = logging.getLogger(__name__)
@@ -139,6 +139,83 @@ def find_student_materials(input_dir: Path) -> Dict[str, Path]:
                 break
 
     return materials
+
+
+def convert_markdown_to_docx(markdown_path: Path, docx_path: Optional[Path] = None) -> Path:
+    """
+    Convert a Markdown file to DOCX format.
+
+    Args:
+        markdown_path: Path to input .md file
+        docx_path: Path for output .docx file (optional, defaults to same name with .docx extension)
+
+    Returns:
+        Path to created DOCX file
+    """
+    try:
+        from docx import Document
+        from docx.shared import Pt, Inches
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+
+        logger.info(f"Converting {markdown_path.name} to DOCX...")
+
+        # Set default output path
+        if docx_path is None:
+            docx_path = markdown_path.with_suffix('.docx')
+
+        # Read markdown content
+        with open(markdown_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # Create document
+        doc = Document()
+
+        # Set default font
+        style = doc.styles['Normal']
+        font = style.font
+        font.name = 'Times New Roman'
+        font.size = Pt(12)
+
+        # Process content line by line
+        lines = content.split('\n')
+        i = 0
+        while i < len(lines):
+            line = lines[i].strip()
+
+            # Skip empty lines at start
+            if not line:
+                i += 1
+                continue
+
+            # Handle letterhead (lines starting with __)
+            if line.startswith('__') and line.endswith('__'):
+                text = line.strip('_')
+                p = doc.add_paragraph(text)
+                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+                run = p.runs[0]
+                run.bold = True
+                i += 1
+                continue
+
+            # Regular paragraph
+            if line and not line.startswith('#'):
+                doc.add_paragraph(line)
+
+            i += 1
+
+        # Save document
+        docx_path.parent.mkdir(parents=True, exist_ok=True)
+        doc.save(docx_path)
+
+        logger.info(f"Successfully converted to: {docx_path}")
+        return docx_path
+
+    except ImportError:
+        logger.error("python-docx not installed. This is required for DOCX conversion.")
+        raise
+    except Exception as e:
+        logger.error(f"Error converting to DOCX: {e}")
+        raise
 
 
 def save_markdown(content: str, output_path: Path) -> None:

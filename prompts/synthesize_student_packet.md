@@ -25,11 +25,11 @@ Extract and present structured information:
 - **Email**: Student's email address
 - **Current Status**: Current academic status (e.g., "Senior, Computer Science")
 - **GPA**: Overall GPA if available
+- **Honors / Awards**: Any honors, awards, or distinctions (Dean's List, scholarships, etc.)
 - **Graduation**: Expected or actual graduation date
 - **Interaction Period**: Period of interaction with Professor Gormley (infer from materials or mark [TO_VERIFY])
 - **Relationship**: Nature of relationship (e.g., "Student in 10-301, Teaching Assistant, Research Assistant")
-- **Letter Type**: Type of application (e.g., "PhD Application", "MS Application", "Job Application")
-- **Target Program/Position**: Specific program or position being applied to
+- **Letter Type**: Type of application (e.g., "PhD Application", "MS Application", "Job Application" or mark [TO_VERIFY])
 
 ### 2. Academic Performance
 
@@ -40,72 +40,55 @@ Extract academic information from the transcript and resume:
 - If not found in materials, note [TO_VERIFY - Professor should confirm courses and grades]
 
 **Other Relevant Coursework:**
-- List other relevant courses (especially ML, CS, related fields) with grades
+- List other relevant courses (especially ML and AI courses) with grades
 - Focus on advanced courses, graduate-level courses, or those demonstrating technical depth
 - Include course numbers if available
 
-**Academic Standing:**
-- Overall GPA
-- Major GPA (if available)
-- Any honors, awards, or distinctions
-- Academic achievements (Dean's List, scholarships, etc.)
-
 ### 3. Teaching Assistant Work
 
-Extract TA-related information from accomplishments and resume:
+Extract TA-related information from accomplishments and resume. For each course that was TAed, identify the following:
 
-**Courses:** List the specific courses where student was a TA (with course numbers and semesters if available)
+- **Course details:** Course name, course number, semester(s) of the TA-ship
+- **With Professor Gormley:** Whether course was TAed with Professor Gormley as the instructor or mark [TO_VERIFY]
+- **Responsibilities:** Extract standard TA responsibilities mentioned (office hours, grading, recitations, etc.)
+- **Accomplishments from Student:** List specific contributions and achievements as TA. Include concrete examples and impact (e.g., "Created autograder affecting 50+ students"). Preserve the student's own descriptions where possible. Look for: curriculum development, student support initiatives, technical contributions, mentoring.
 
-**Responsibilities:**
-- Extract standard TA responsibilities mentioned (office hours, grading, recitations, etc.)
-
-**Accomplishments from Student:**
-- List specific contributions and achievements as TA
-- Include concrete examples and impact (e.g., "Created autograder affecting 50+ students")
-- Preserve the student's own descriptions where possible
-- Look for: curriculum development, student support initiatives, technical contributions, mentoring
+(If the TA-ship was with Professor Gormley, include all sections for which there is actual support in the existing text. If the TA-ship was NOT with Professor Gormley, then keep it very brief.)
 
 ### 4. Research Contributions
 
 Extract research-related information from accomplishments, resume, and any research descriptions:
 
 For each research project or experience:
+- **Project:** Project name or brief description
+- **With Professor Gormley:** Whether the project was done in collaboration with Professor Gormley or mark [TO_VERIFY]
+- **Duration:** Time period of involvement
+- **Role:** Student's role (Research Assistant, Independent Researcher, etc.)
+- **Accomplishments from Student:**
+    - Technical contributions (implementation work, experiments, analysis)
+    - Specific tasks and responsibilities
+    - Innovations or novel approaches
+    - Tools, methods, or techniques used
+- **Results:**
+    - Publications (papers submitted, accepted, or published)
+    - Code releases, open-source contributions
+    - Presentations, posters, talks
+    - Measurable impacts or outcomes
 
-**Project:** Project name or brief description
-**Duration:** Time period of involvement
-**Role:** Student's role (Research Assistant, Independent Researcher, etc.)
-
-**Accomplishments from Student:**
-- Technical contributions (implementation work, experiments, analysis)
-- Specific tasks and responsibilities
-- Innovations or novel approaches
-- Tools, methods, or techniques used
-
-**Results:**
-- Publications (papers submitted, accepted, or published)
-- Code releases, open-source contributions
-- Presentations, posters, talks
-- Measurable impacts or outcomes
+(If the research project was with Professor Gormley, include all sections for which there is actual support in the existing text. If the research was NOT with Professor Gormley, then keep it very brief.)
 
 ### 5. Goals and Experience Alignment
 
 Extract from the personal statement:
 
-**Target Program/Position:** The specific program or position being applied to
-
 **Career Goals:** (from personal statement)
 - Long-term career aspirations
 - Immediate post-graduation goals
 
-**Research Interests:** (from personal statement)
+**Research Interests:** (from personal statement and resume)
 - Specific research areas or topics of interest
 - Methodological interests
 - Application domains
-
-**Why This Program:** (from personal statement, if mentioned)
-- Reasons for applying to this specific program
-- Faculty members or research groups of interest
-- Alignment between student's goals and program offerings
 
 ### 6. Additional Information
 
@@ -133,9 +116,7 @@ Include any other relevant information that doesn't fit the above categories:
 
 - **Interaction Period and Relationship**: Infer from dates in materials (TA semesters, research project dates, course enrollment). If unclear, mark `[TO_VERIFY]`
 
-- **Accomplishments Organization**: Group accomplishments by category (TA work, research, etc.) even if student provided them in a different format
-
-- **Length Target**: Aim for approximately 800-1000 words for sections 1-5 (excluding section 6)
+- **Length Target**: Keep things focused and factual. Do not write more than you need to.
 
 ## Placeholder for Professor's Input
 

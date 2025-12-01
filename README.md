@@ -7,7 +7,7 @@ The system consists of three phases:
 2. **Phase 2: Student Packet Synthesis** - Consolidate student materials into structured documents (per student)
 3. **Phase 3: Letter Generation** - Generate personalized letters combining style and student data (per student, per program)
 
-Current Status: **Phases 1 & 2 Complete**
+Current Status: **All 3 Phases Complete! 🎉**
 
 ## Quick Start - Phase 1
 
@@ -44,6 +44,24 @@ python3 -m lor.cli synthesize-packet data/students/jane_smith/
 
 **Note**: Test without API key: `python3 test_phase2_manual.py`
 
+## Quick Start - Phase 3
+
+Phase 3 generates the actual letter by combining style guide and student packet (done per student):
+
+```bash
+# 1. Ensure student packet is complete (especially professor's perspective section)
+# 2. Generate letter
+python3 -m lor.cli generate-letter data/students/jane_smith/
+
+# 3. Generate and convert to DOCX
+python3 -m lor.cli generate-letter data/students/jane_smith/ --docx
+
+# 4. Review data/students/jane_smith/output/letter_draft.md
+# 5. Edit as needed and send!
+```
+
+**Note**: Test without API key: `python3 test_phase3_manual.py`
+
 ## Features
 
 ### Phase 1: Style Extraction
@@ -58,6 +76,13 @@ python3 -m lor.cli synthesize-packet data/students/jane_smith/
 - **Structured Output**: Creates organized packet with sections for academics, TA work, research, goals
 - **Privacy Separation**: Each student packet is isolated (never mixed with other students)
 - **Professor Input**: Includes placeholder for professor's unique perspective and assessment
+
+### Phase 3: Letter Generation
+- **Style-Guided Generation**: Combines style guide with student packet to create authentic letters
+- **Anti-Hallucination**: Explicit instructions prevent LLM from inventing details
+- **Multiple Formats**: Generates markdown with optional DOCX conversion
+- **Customizable**: Options for custom output filenames and style guides
+- **Quality Checks**: Warns if professor's perspective section is incomplete
 
 ### Document Processing
 - Processes single `.docx` files or recursively scans directories
@@ -176,12 +201,52 @@ python3 -m lor.cli synthesize-packet data/students/jane_smith/
   - Growth trajectory
   - Recommendation strength calibration
 
+#### Phase 3: Letter Generation (Per Student)
+
+**Prerequisites:**
+- Phase 1 complete: `data/style_guide/style_guide.md` exists
+- Phase 2 complete: `data/students/[name]/student_packet.md` exists
+- Professor's perspective section completed in student packet
+
+**Generate letter:**
+```bash
+# Generate markdown letter
+python3 -m lor.cli generate-letter data/students/jane_smith/
+
+# Output: data/students/jane_smith/output/letter_draft.md
+```
+
+**Convert to DOCX:**
+```bash
+# Generate and convert to DOCX
+python3 -m lor.cli generate-letter data/students/jane_smith/ --docx
+
+# Output: data/students/jane_smith/output/letter_draft.md
+#         data/students/jane_smith/output/letter_draft.docx
+```
+
+**Custom options:**
+```bash
+# Custom output filename
+python3 -m lor.cli generate-letter data/students/jane_smith/ --output letter_stanford.md
+
+# Custom style guide
+python3 -m lor.cli generate-letter data/students/jane_smith/ --style-guide custom_style.md
+```
+
+**Post-generation:**
+- Review letter for factual accuracy
+- Verify voice sounds authentic
+- Edit as needed
+- Send!
+
 #### View Available Commands
 ```bash
 python3 -m lor.cli --help
 python3 -m lor.cli redact --help
 python3 -m lor.cli extract-style --help
 python3 -m lor.cli synthesize-packet --help
+python3 -m lor.cli generate-letter --help
 ```
 
 ### Standalone Script Usage
