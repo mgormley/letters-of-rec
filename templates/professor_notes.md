@@ -3,6 +3,7 @@
 [TO BE COMPLETED MANUALLY BY PROFESSOR]
 
 - **Student Pronouns:** TODO [e.g., he/him, she/her, they/them]
+- **Letter Type**: Type of application (e.g., "PhD Application", "MS Application", "Job Application")
 - **Courses TAed with Professor Gormley:** TODO Course Number - Course Name, Semester
 - **Research Projects with Professor Gormley:** TODO Project name or brief description, Duration
 - **Overall Assessment**: TODO Ranking or comparison to peer group. Examples:
