@@ -32,7 +32,9 @@ Generate a complete letter of recommendation following these guidelines:
 
 Organize based on the student's profile. 
 
-The number of body paragraphs should be dictated by level of interaction with student. For example, include one paragraph for each major research project done in collaboration with Professor Gormley (if applicable), one paragraph for each course they TAed with Professor Gormley (if applicable), etc. Bundle all the research projects / internships / TA-ships that they did with other advisors or instructors into a single paragraph (if applicable). 
+The number of body paragraphs should be dictated by level of interaction with student. For example, include one paragraph for each major research project done in collaboration with Professor Gormley (if applicable), one paragraph for each course they TAed with Professor Gormley (if applicable), etc. 
+
+EXTREMELY IMPORTANT: Summarize all the (1) research projects with advisors other than Professor Gormley, (2) TA-ships with instructors other than Professor Gormley, and (3) internships that were done with other advisors or instructors into a single paragraph if the student has any of these. This single paragraph will provide a single point of summary of the applicants preparedness based on Professor Gormley's reading of their materials and distant observation of their work, rather than through personal interaction on these points.
 
 Typically include:
 
@@ -53,8 +55,8 @@ Typically include:
    - Performance and standing
    - Intellectual qualities demonstrated
 
-4. **All Research / Internships / TA-ships without Professor Gormley** (if applicable)
-   - Include a very concise summary of other work done without Professor Gormley
+4. **Summary of All Other Research / TA / Internship Work** (if applicable)
+   - Include a very concise summary in a single paragraph of all other work done without Professor Gormley (e.g. research advised by someone else, TA for a course instructed by someone else, or internship or work at another institution)
 
 5. **Additional Qualities** (integrated throughout or separate paragraph)
    - Collaboration and leadership
