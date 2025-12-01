@@ -24,8 +24,9 @@ Generate a complete letter of recommendation following these guidelines:
 - Use one of the opening line templates from the style guide
 - State the purpose clearly
 - Establish the relationship (courses, TA work, research)
-- Mention current status and target program
+- Mention current status
 - End with clear recommendation statement
+- Purposefully avoid naming the target program (e.g. just reference "your graduate program" rather than a specific institution / program name) so that this letter can be reused for multiple different institutions / programs.
 
 **Body Paragraphs (multiple paragraphs)**
 

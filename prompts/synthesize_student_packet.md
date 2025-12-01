@@ -31,7 +31,7 @@ Extract and present structured information:
 - **Graduation**: Expected or actual graduation date
 - **Interaction Period**: Period of interaction with Professor Gormley (infer from TA/research dates in Professor Notes and student materials)
 - **Relationship**: Nature of relationship (e.g., "Student in 10-301, Teaching Assistant, Research Assistant" - use Professor Notes)
-- **Letter Type**: Type of application (e.g., "PhD Application", "MS Application", "Job Application" or mark [TO_VERIFY])
+- **Letter Type**: Type of application (e.g., "PhD Application", "MS Application", "Job Application" or mark [TO_VERIFY]). Do not include a specific institution nor program name here. 
 
 ### 2. Academic Performance
 
