@@ -20,14 +20,14 @@ Generate a complete letter of recommendation following these guidelines:
 
 ### Letter Structure
 
-**Opening Paragraph (100-150 words)**
+**Opening Paragraph**
 - Use one of the opening line templates from the style guide
 - State the purpose clearly
 - Establish the relationship (courses, TA work, research)
 - Mention current status and target program
 - End with clear recommendation statement
 
-**Body Paragraphs (3-4 paragraphs, 450-600 words total)**
+**Body Paragraphs (multiple paragraphs)**
 
 Organize based on the student's profile. 
 
@@ -60,7 +60,7 @@ Typically include:
    - Technical depth
    - Growth trajectory
 
-**Closing Paragraph (50-100 words)**
+**Closing Paragraph**
 - Summary of strongest attributes
 - Explicit recommendation strength
 - Standard closing offer
@@ -85,9 +85,15 @@ Typically include:
 
 The overall length of the letter should be determined by the level of interaction with the student. For example:
 
-- For a student who TAed with me: 500 words
-- For a student who TAed with me and completed a research project: 850 words
-- For a PhD student who has worked with me for multiple years: 1000 - 1400 words
+**Total Length:**
+- For a student who TAed with me: 500 words total
+- For a student who TAed with me and completed a research project: 850 words total
+- For a PhD student who has worked with me for multiple years: 1000 - 1400 words total
+
+**Paragraph Lengths:**
+- Opening paragraph: 70–190 words (for complex profiles often at the high end).
+- Each body paragraph: 90–200 words.
+- Closing paragraph: 40–60 words.
 
 ## Anti-Hallucination Checklist
 
@@ -189,5 +195,84 @@ Your goal is to produce a letter that:
 3. Sounds authentically like his writing
 4. Provides specific, credible evidence
 5. Makes a compelling case appropriate to the recommendation strength
+
+## Background about Professor Gormley
+
+Here are some additional details about Professor Matt Gormley's background. 
+
+### Professor Gormley regularly teaches the following courses:
+
+**10-301/601 Introduction to Machine Learning:**
+This course typically has 250 - 350 students and 16-20 TAs. 
+
+Below is an overview of the course structure:
+```markdown
+# Assignments
+There will be 9 homework assignments during the semester in addition to the exams. The assignments will consist of both theoretical and programming problems. 
+
+* Homework 1: Background Material (written / programming)
+* Homework 2: Decision Trees (written / programming)
+* Homework 3: KNN, Perceptron, and Linear Regression (written)
+* Homework 4: Logistic Regression (written / programming)
+* Homework 5: Neural Networks (written / programming)
+* Homework 6: PAC Learning and Ethics (written)
+* Homework 7: Deep Learning (written / programming)
+* Homework 8: Deep Reinforcement Learning (written / programming)
+* Homework 9: Learning Paradigms (written)
+
+# Quizzes
+There will be three programming quizzes. Each quiz will cover the material from two of the programming assignments.
+
+* Quiz 1 (in-class): Homeworks 1-2
+* Quiz 2 (in-class): Homeworks 4-5
+* Quiz 3 (in-class): Homeworks 7-8
+
+# Exams
+There will be three exams. The links to the Practice Problems and Exam Exit Polls will be provided below.
+* Exam 1 (in-person): Lectures 1-7
+* Exam 2 (in-person): Lectures 8-16
+* Exam 3 (in-person): Lectures 17-26
+```
+
+**10-423/623/723 Generative AI:** 
+This course typically has 150 - 250 students and 12-16 TAs. During the semesters Spring 2024 - Spring 2025, the course number was 10-423/623; from Fall 2025 onward it has been 10-423/623/723. 
+
+Below is an overview of the course structure:
+```markdown
+## Assignments
+There will be 5 homework assignments (and a special extra assignment for 10-623 and 10-723 only). The assignments will consist of both theoretical and programming problems. 
+
+*   Homework 0: PyTorch Primer
+*   Homework 1: Large Language Models
+*   Homework 2: Image Generation
+*   Homework 3: Applying and Adapting LLMs
+*   Homework 4: Multimodal Foundation Models
+*   Homework 623: (10-623 and 10-723 only)
+
+## Quizzes
+There will be 5 quizzes (plus an additional quiz for 10-723 students only).
+
+* Quiz 1 (Lectures 1 - 4)
+* Quiz 2 (Lectures 5 - 9)
+* Quiz 3 (Lectures 9 - 12)
+* Quiz 4 (Lectures 12 - 15)
+* Quiz 5 (Lectures 16 - 20)
+* Quiz723 (Lecture 21 - 24) for 10-723 students only
+
+## Exams
+There will be one exam. 
+The links to the Practice Problems and Exam Exit Polls will be provided below.
+
+## Project
+The course project affords an opportunity to apply generative modeling to a real-world machine learning problem in your domain of interest. The work will be completed in the last 4 weeks of the course, written up in a report, and presented at the poster session. Students will submit several deliverables throughout the semester. 
+
+1.  **Team Formation:** Each team will consist of 3 people. Teams must be specified in advance of the proposal deadline.
+2.  **Proposal:** The proposal will describe the task, dataset, methods, and goals for the project. 
+3.  **Midway report:** The midway report presents each group a chance to present their progress partway through the project's duration. 
+4.  **Final report:** The final report will describe the methods that were used and the present experimental results that illustrate a contrast between competing methods. 
+5. **Final poster:** The final poster should summarize the accomplishments of the project. (Students are required to attend the final poster session.)
+```
+
+---
 
 Now, generate the letter based on the student packet and style guide provided below.
