@@ -7,8 +7,6 @@ The system consists of three phases:
 2. **Phase 2: Student Packet Synthesis** - Consolidate student materials into structured documents (per student)
 3. **Phase 3: Letter Generation** - Generate personalized letters combining style and student data (per student, per program)
 
-Current Status: **All 3 Phases Complete! 🎉**
-
 ## Quick Start - Phase 1
 
 Phase 1 is a one-time setup to extract your writing style from historical letters:
@@ -52,9 +50,6 @@ Phase 3 generates the actual letter by combining style guide and student packet 
 # 1. Ensure student packet is complete (especially professor's perspective section)
 # 2. Generate letter
 python3 -m lor.cli generate-letter data/students/jane_smith/
-
-# 3. Generate and convert to DOCX
-python3 -m lor.cli generate-letter data/students/jane_smith/ --docx
 
 # 4. Review data/students/jane_smith/output/letter_draft.md
 # 5. Edit as needed and send!
@@ -102,7 +97,7 @@ python3 -m lor.cli generate-letter data/students/jane_smith/ --docx
 - Python 3.7 or higher
 - [Poetry](https://python-poetry.org/docs/#installation) (recommended) or pip
 
-### Using Poetry (Recommended)
+### Using Poetry 
 
 1. Clone or download this repository
 
@@ -120,127 +115,7 @@ cp .env.example .env
 # Get your API key from: https://platform.openai.com/api-keys
 ```
 
-### Using pip (Alternative)
-
-If you prefer not to use Poetry:
-
-1. Clone or download this repository
-
-2. Install dependencies:
-```bash
-pip install python-docx mammoth openai python-dotenv click
-```
-
-3. Set up your OpenAI API key (same as above)
-
-## Usage
-
-This tool provides two interfaces:
-1. **CLI tool** (`lor` command) - Recommended, supports multiple subcommands
-2. **Standalone script** (`redact_student_info.py`) - Direct script execution
-
-### CLI Usage (Recommended)
-
-The `lor` command provides multiple subcommands for different phases:
-
-#### Phase 1: Style Extraction (One-Time Setup)
-
-**Step 1: Redact historical letters**
-```bash
-# Redact student information from original letters
-python3 -m lor.cli redact data/original_letters/
-
-# Output: data/redacted_letters/*.md
-```
-
-**Step 2: Extract writing style**
-```bash
-# Extract style guide from redacted letters
-python3 -m lor.cli extract-style data/redacted_letters/
-
-# Output: data/style_guide/style_guide.md
-```
-
-**Step 3: Review and refine**
-- Open `data/style_guide/style_guide.md`
-- Review the extracted style patterns
-- Edit to ensure accuracy and completeness
-- Keep in version control for future refinements
-
-#### Phase 2: Student Packet Synthesis (Per Student)
-
-**Step 1: Organize student materials**
-```bash
-# Create student directory
-mkdir -p data/students/jane_smith/input
-
-# Student provides these files (any of .pdf, .docx, .txt):
-# - resume.pdf or cv.pdf
-# - transcript.pdf
-# - accomplishments.txt or achievements.txt
-# - statement.pdf or personal_statement.pdf
-```
-
-**Step 2: Synthesize packet**
-```bash
-# Auto-generate student packet from materials
-python3 -m lor.cli synthesize-packet data/students/jane_smith/
-
-# Output: data/students/jane_smith/student_packet.md
-# Also creates: data/students/jane_smith/markdown/ (converted files)
-```
-
-**Step 3: Add professor's perspective**
-- Open `data/students/jane_smith/student_packet.md`
-- Review auto-generated sections for accuracy
-- Complete the "Strengths from Professor's Perspective" section:
-  - Overall assessment and ranking
-  - Key strengths with specific evidence
-  - Standout moments and anecdotes
-  - Comparison to peers
-  - Growth trajectory
-  - Recommendation strength calibration
-
-#### Phase 3: Letter Generation (Per Student)
-
-**Prerequisites:**
-- Phase 1 complete: `data/style_guide/style_guide.md` exists
-- Phase 2 complete: `data/students/[name]/student_packet.md` exists
-- Professor's perspective section completed in student packet
-
-**Generate letter:**
-```bash
-# Generate markdown letter
-python3 -m lor.cli generate-letter data/students/jane_smith/
-
-# Output: data/students/jane_smith/output/letter_draft.md
-```
-
-**Convert to DOCX:**
-```bash
-# Generate and convert to DOCX
-python3 -m lor.cli generate-letter data/students/jane_smith/ --docx
-
-# Output: data/students/jane_smith/output/letter_draft.md
-#         data/students/jane_smith/output/letter_draft.docx
-```
-
-**Custom options:**
-```bash
-# Custom output filename
-python3 -m lor.cli generate-letter data/students/jane_smith/ --output letter_stanford.md
-
-# Custom style guide
-python3 -m lor.cli generate-letter data/students/jane_smith/ --style-guide custom_style.md
-```
-
-**Post-generation:**
-- Review letter for factual accuracy
-- Verify voice sounds authentic
-- Edit as needed
-- Send!
-
-#### View Available Commands
+### View Available Commands
 ```bash
 python3 -m lor.cli --help
 python3 -m lor.cli redact --help
@@ -248,115 +123,3 @@ python3 -m lor.cli extract-style --help
 python3 -m lor.cli synthesize-packet --help
 python3 -m lor.cli generate-letter --help
 ```
-
-### Standalone Script Usage
-
-You can also run the script directly:
-
-```bash
-# Process a single file
-python redact_student_info.py letter.docx
-
-# Process a directory
-python redact_student_info.py ./letters/
-
-# With options
-python redact_student_info.py ./letters/ --model gpt-4-turbo --dry-run
-```
-
-## How It Works
-
-1. **File Discovery**: Finds all `.docx` files in the specified path (skips temporary files like `~$filename.docx`)
-
-2. **Conversion**: Converts each Word document to Markdown format using the `mammoth` library
-
-3. **Redaction**: Sends the Markdown to OpenAI's API with specific instructions to identify and replace student information with placeholders
-
-4. **Output**: Saves the redacted content as a `.md` file with the same name as the original document
-
-## Output
-
-For each input file `document.docx`, the script creates `document.md` in the same directory containing the redacted content.
-
-Example:
-```
-letters/
-├── recommendation_john_doe.docx
-├── recommendation_john_doe.md    # ← Generated (redacted)
-├── recommendation_jane_smith.docx
-└── recommendation_jane_smith.md  # ← Generated (redacted)
-```
-
-## Requirements
-
-- Python 3.7+
-- OpenAI API key
-- Dependencies (managed by Poetry or installed manually):
-  - `python-docx` - Reading Word documents
-  - `mammoth` - Converting Word to Markdown
-  - `openai` - OpenAI API client
-  - `python-dotenv` - Environment variable management
-  - `click` - CLI framework
-
-## Security Notes
-
-- Your OpenAI API key should be kept confidential
-- The `.env` file is gitignored by default (add it to `.gitignore` if not already present)
-- Redacted documents should be reviewed before sharing to ensure complete redaction
-- Original `.docx` files are never modified by this script
-
-## Troubleshooting
-
-**Error: "OpenAI API key not found"**
-- Ensure you've created a `.env` file with your API key, or pass it via `--api-key`
-
-**Error: "No .docx files found"**
-- Check that the path is correct and contains `.docx` files
-- Ensure files don't start with `~$` (temporary files)
-
-**Conversion warnings**
-- Some complex Word formatting may not convert perfectly to Markdown
-- Review the output files to ensure acceptable formatting
-
-**API rate limits**
-- If processing many files, you may hit OpenAI rate limits
-- The script will report errors for failed files and continue with others
-
-## Cost Considerations
-
-This script makes API calls to OpenAI, which incur costs based on token usage. Factors affecting cost:
-- Document length (longer documents = more tokens)
-- Model selection (GPT-4 is more expensive than GPT-3.5-turbo)
-- Number of documents processed
-
-Use `--dry-run` to preview before processing to estimate the number of documents.
-
-## Testing
-
-The project includes system tests to verify functionality:
-
-### Run Mock Test (No API Key Required)
-Tests document creation, conversion, and script execution without making API calls:
-```bash
-python3 tests/test_redaction_mock.py
-```
-
-### Run Full Test (Requires API Key)
-Tests the complete redaction workflow including OpenAI API calls:
-```bash
-# Set your API key first
-export OPENAI_API_KEY=your_key_here
-
-# Run the test
-python3 tests/test_redaction.py
-```
-
-The full test creates a sample document with student information, runs the redaction script, and verifies that:
-- Student names, emails, and IDs are properly redacted
-- Redaction placeholders are inserted correctly
-- Non-student information (like professor names) is preserved
-
-## License
-
-This tool is provided as-is for educational and professional use.
-# letters-of-rec

@@ -23,6 +23,7 @@ Your output must be a well-structured markdown document with the following secti
 Extract and present structured information:
 - **Name**: Student's full name
 - **Email**: Student's email address
+- **Pronouns**: he/him, she/her, they/them (attempt to infer from packet or mark [TO_VERIFY])
 - **Current Status**: Current academic status (e.g., "Senior, Computer Science")
 - **GPA**: Overall GPA if available
 - **Honors / Awards**: Any honors, awards, or distinctions (Dean's List, scholarships, etc.)
