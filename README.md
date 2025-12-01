@@ -33,11 +33,14 @@ Phase 2 creates a structured student packet from application materials (done per
 mkdir -p data/students/jane_smith/input
 # Place resume.pdf, transcript.pdf, accomplishments.txt, statement.pdf in input/
 
-# 2. Synthesize student packet
+# 2. Copy professor notes template and fill it in
+cp templates/professor_notes.md data/students/jane_smith/input/professor_notes.md
+# Edit professor_notes.md with your observations, assessment, and contextual information
+
+# 3. Synthesize student packet
 python3 -m lor.cli synthesize-packet data/students/jane_smith/
 
-# 3. Review data/students/jane_smith/student_packet.md
-# 4. Add "Strengths from Professor's Perspective" section
+# 4. Review data/students/jane_smith/student_packet.md
 ```
 
 **Note**: Test without API key: `python3 test_phase2_manual.py`
@@ -47,12 +50,12 @@ python3 -m lor.cli synthesize-packet data/students/jane_smith/
 Phase 3 generates the actual letter by combining style guide and student packet (done per student):
 
 ```bash
-# 1. Ensure student packet is complete (especially professor's perspective section)
+# 1. Ensure student packet is complete and accurate
 # 2. Generate letter
 python3 -m lor.cli generate-letter data/students/jane_smith/
 
-# 4. Review data/students/jane_smith/output/letter_draft.md
-# 5. Edit as needed and send!
+# 3. Review data/students/jane_smith/output/letter_draft.md and letter_draft.docx
+# 4. Edit as needed and send!
 ```
 
 **Note**: Test without API key: `python3 test_phase3_manual.py`
@@ -66,18 +69,19 @@ python3 -m lor.cli generate-letter data/students/jane_smith/
 - **Comprehensive Style Guide**: Captures sentence structure, vocabulary, tone, common phrases, and letter organization
 
 ### Phase 2: Student Packet Synthesis
-- **Multi-Format Support**: Converts PDF, DOCX, TXT files to markdown
-- **Intelligent Extraction**: Uses LLM to extract and organize information from student materials
-- **Structured Output**: Creates organized packet with sections for academics, TA work, research, goals
+- **Multi-Format Support**: Converts PDF, DOCX, TXT, MD files to markdown
+- **Professor Notes Template**: Provides structured template for professor's observations and assessment
+- **Intelligent Extraction**: Uses LLM to extract and organize information from student materials and professor notes
+- **Structured Output**: Creates organized packet with sections for academics, TA work, research, goals, and professor's perspective
 - **Privacy Separation**: Each student packet is isolated (never mixed with other students)
-- **Professor Input**: Includes placeholder for professor's unique perspective and assessment
+- **Complete Integration**: Professor's assessment integrated during synthesis (no manual post-processing needed)
 
 ### Phase 3: Letter Generation
 - **Style-Guided Generation**: Combines style guide with student packet to create authentic letters
 - **Anti-Hallucination**: Explicit instructions prevent LLM from inventing details
-- **Multiple Formats**: Generates markdown with optional DOCX conversion
+- **Multiple Formats**: Generates markdown and automatically converts to DOCX
 - **Customizable**: Options for custom output filenames and style guides
-- **Quality Checks**: Warns if professor's perspective section is incomplete
+- **Complete Workflow**: Ready-to-send letters combining professor's voice with accurate student information
 
 ### Document Processing
 - Processes single `.docx` files or recursively scans directories

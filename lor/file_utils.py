@@ -126,7 +126,8 @@ def find_student_materials(input_dir: Path) -> Dict[str, Path]:
         'resume': ['resume.*', 'cv.*'],
         'transcript': ['transcript.*', 'grades.*'],
         'accomplishments': ['accomplishments.*', 'achievements.*', 'activities.*'],
-        'statement': ['statement.*', 'personal_statement.*', 'sop.*', 'purpose.*']
+        'statement': ['statement.*', 'personal_statement.*', 'sop.*', 'purpose.*'],
+        'professor_notes': ['professor_notes.*']
     }
 
     for material_type, pattern_list in patterns.items():

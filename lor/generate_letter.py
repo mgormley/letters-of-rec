@@ -48,18 +48,6 @@ def load_student_packet(student_dir: Path) -> str:
     with open(packet_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # Check if professor's perspective is completed
-    if "[TO BE COMPLETED MANUALLY BY PROFESSOR]" in content:
-        logger.warning(
-            "\n" + "="*60 +
-            "\nWARNING: Student packet contains placeholder text:\n"
-            "'[TO BE COMPLETED MANUALLY BY PROFESSOR]'\n"
-            "\nThe generated letter may be incomplete without the professor's\n"
-            "personal observations and assessment. Consider completing this\n"
-            "section before generating the letter.\n" +
-            "="*60
-        )
-
     return content
 
 

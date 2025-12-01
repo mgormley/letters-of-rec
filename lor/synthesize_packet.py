@@ -89,10 +89,11 @@ def combine_materials_for_prompt(materials: Dict[str, str], prompt_template: str
         'resume': 'Resume/CV',
         'transcript': 'Academic Transcript',
         'accomplishments': 'Accomplishments List',
-        'statement': 'Personal Statement'
+        'statement': 'Personal Statement',
+        'professor_notes': 'Professor Notes'
     }
 
-    for material_type in ['resume', 'transcript', 'accomplishments', 'statement']:
+    for material_type in ['resume', 'transcript', 'accomplishments', 'statement', 'professor_notes']:
         if material_type in materials:
             label = material_labels.get(material_type, material_type.title())
             content = materials[material_type]
@@ -122,12 +123,14 @@ def synthesize_student_packet(student_dir: Path) -> None:
         │   ├── resume.pdf
         │   ├── transcript.pdf
         │   ├── accomplishments.txt
-        │   └── statement.pdf
+        │   ├── statement.pdf
+        │   └── professor_notes.md        # Must be provided!
         ├── markdown/          # Created by this function
         │   ├── resume.md
         │   ├── transcript.md
         │   ├── accomplishments.md
-        │   └── statement.md
+        │   ├── statement.md
+        │   └── professor_notes.md
         └── student_packet.md  # Created by this function
     """
     logger.info(f"{'='*60}")
@@ -175,6 +178,6 @@ def synthesize_student_packet(student_dir: Path) -> None:
     logger.info("Student packet synthesis complete!")
     logger.info("Next steps:")
     logger.info(f"1. Review the generated packet: {output_path}")
-    logger.info("2. Add 'Strengths from Professor's Perspective' section")
-    logger.info("3. Verify all information is accurate")
+    logger.info("2. Verify all information is accurate")
+    logger.info("3. Make any necessary edits before generating the letter")
     logger.info(f"{'='*60}")

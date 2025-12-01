@@ -13,6 +13,7 @@ You will receive the following materials converted to markdown:
 2. **Transcript** - Academic transcript with courses and grades
 3. **Accomplishments** - Student's self-reported accomplishments and contributions
 4. **Personal Statement** - Student's statement of purpose or application essay
+5. **Professor Notes** - Professor's observations, assessments, and contextual information
 
 ## Output Format
 
@@ -23,13 +24,13 @@ Your output must be a well-structured markdown document with the following secti
 Extract and present structured information:
 - **Name**: Student's full name
 - **Email**: Student's email address
-- **Pronouns**: he/him, she/her, they/them (attempt to infer from packet or mark [TO_VERIFY])
+- **Pronouns**: he/him, she/her, they/them (extract from Professor Notes)
 - **Current Status**: Current academic status (e.g., "Senior, Computer Science")
 - **GPA**: Overall GPA if available
 - **Honors / Awards**: Any honors, awards, or distinctions (Dean's List, scholarships, etc.)
 - **Graduation**: Expected or actual graduation date
-- **Interaction Period**: Period of interaction with Professor Gormley (infer from materials or mark [TO_VERIFY])
-- **Relationship**: Nature of relationship (e.g., "Student in 10-301, Teaching Assistant, Research Assistant")
+- **Interaction Period**: Period of interaction with Professor Gormley (infer from TA/research dates in Professor Notes and student materials)
+- **Relationship**: Nature of relationship (e.g., "Student in 10-301, Teaching Assistant, Research Assistant" - use Professor Notes)
 - **Letter Type**: Type of application (e.g., "PhD Application", "MS Application", "Job Application" or mark [TO_VERIFY])
 
 ### 2. Academic Performance
@@ -37,8 +38,8 @@ Extract and present structured information:
 Extract academic information from the transcript and resume:
 
 **Courses with Professor Gormley:**
-- List any courses taken with Professor Gormley (course number, title, semester, grade if available)
-- If not found in materials, note [TO_VERIFY - Professor should confirm courses and grades]
+- List courses taken with Professor Gormley from transcript cross-referenced with student materials
+- Course number, title, semester, grade if available
 
 **Other Relevant Coursework:**
 - List other relevant courses (especially ML and AI courses) with grades
@@ -47,10 +48,10 @@ Extract academic information from the transcript and resume:
 
 ### 3. Teaching Assistant Work
 
-Extract TA-related information from accomplishments and resume. For each course that was TAed, identify the following:
+Extract TA-related information from accomplishments, resume, and Professor Notes. For each course that was TAed, identify the following:
 
 - **Course details:** Course name, course number, semester(s) of the TA-ship
-- **With Professor Gormley:** Whether course was TAed with Professor Gormley as the instructor or mark [TO_VERIFY]
+- **With Professor Gormley:** Whether course was TAed with Professor Gormley as the instructor (check Professor Notes for definitive list)
 - **Responsibilities:** Extract standard TA responsibilities mentioned (office hours, grading, recitations, etc.)
 - **Accomplishments from Student:** List specific contributions and achievements as TA. Include concrete examples and impact (e.g., "Created autograder affecting 50+ students"). Preserve the student's own descriptions where possible. Look for: curriculum development, student support initiatives, technical contributions, mentoring.
 
@@ -58,11 +59,11 @@ Extract TA-related information from accomplishments and resume. For each course 
 
 ### 4. Research Contributions
 
-Extract research-related information from accomplishments, resume, and any research descriptions:
+Extract research-related information from accomplishments, resume, and Professor Notes:
 
 For each research project or experience:
 - **Project:** Project name or brief description
-- **With Professor Gormley:** Whether the project was done in collaboration with Professor Gormley or mark [TO_VERIFY]
+- **With Professor Gormley:** Whether the project was done in collaboration with Professor Gormley (check Professor Notes for definitive list)
 - **Duration:** Time period of involvement
 - **Role:** Student's role (Research Assistant, Independent Researcher, etc.)
 - **Accomplishments from Student:**
@@ -91,7 +92,33 @@ Extract from the personal statement:
 - Methodological interests
 - Application domains
 
-### 6. Additional Information
+### 6. Strengths from Professor's Perspective
+
+Extract information from the Professor Notes about the professor's assessment and observations:
+
+**Overall Assessment:**
+- Ranking or comparison to peer group
+
+**Key Strengths:**
+- List 3-5 main strengths with specific evidence from Professor Notes
+- Include concrete examples and observations
+
+**Standout Moments:**
+- Specific anecdotes or observations that illustrate the student's abilities
+
+**Comparison to Peers:**
+- How the student compares to others in similar roles
+
+**Growth Trajectory:**
+- Development and improvement observed over time
+
+**Recommendation Strength:**
+- Explicit calibration of recommendation (e.g., "Tier 1: Exceptional")
+
+**Additional Context:**
+- Any relevant information from Professor Notes not captured elsewhere
+
+### 7. Additional Information
 
 Include any other relevant information that doesn't fit the above categories:
 - Industry experience or internships
@@ -106,37 +133,21 @@ Include any other relevant information that doesn't fit the above categories:
 1. **Accuracy First**: Only include information explicitly stated in the materials
 2. **No Hallucination**: If information is missing or unclear, use `[TO_VERIFY]` markers
 3. **Preserve Student Voice**: When listing accomplishments, keep the student's own descriptions
-4. **Be Specific**: Include concrete details, numbers, course codes, dates whenever available
-5. **Structured Format**: Use consistent markdown formatting (headings, bullet points, bold labels)
-6. **Completeness**: Extract all relevant information, but prioritize quality over quantity
-7. **Context Preservation**: When extracting information, preserve enough context to be meaningful
+4. **Preserve Professor Voice**: When extracting from Professor Notes, preserve the professor's own words and phrasing
+5. **Be Specific**: Include concrete details, numbers, course codes, dates whenever available
+6. **Structured Format**: Use consistent markdown formatting (headings, bullet points, bold labels)
+7. **Completeness**: Extract all relevant information, but prioritize quality over quantity
+8. **Context Preservation**: When extracting information, preserve enough context to be meaningful
 
 ## Special Notes
 
-- **Courses with Professor Gormley**: This is critical information that may not be explicit in student materials. If you cannot definitively identify courses taken with Professor Gormley, mark this section as `[TO_VERIFY - Professor should list courses student took with him and add grades if permitted]`
+- **Professor Notes**: This file contains critical contextual information from the professor including pronouns, courses TAed, research projects, and the professor's assessment. Use this as the authoritative source for interaction details and the professor's perspective.
 
-- **Interaction Period and Relationship**: Infer from dates in materials (TA semesters, research project dates, course enrollment). If unclear, mark `[TO_VERIFY]`
+- **Courses with Professor Gormley**: Cross-reference the Professor Notes list with transcript data to get complete course information (numbers, titles, grades).
+
+- **Interaction Period and Relationship**: Infer from dates in materials (TA semesters, research project dates, course enrollment) and Professor Notes.
 
 - **Length Target**: Keep things focused and factual. Do not write more than you need to.
-
-## Placeholder for Professor's Input
-
-After the automated sections, include this placeholder:
-
-```markdown
-## Strengths from Professor's Perspective
-
-[TO BE COMPLETED MANUALLY BY PROFESSOR]
-
-This section should include:
-- **Overall Assessment**: Ranking or comparison to peer group
-- **Key Strengths**: 3-5 main strengths with specific evidence
-- **Standout Moments**: Specific anecdotes or observations
-- **Comparison to Peers**: How student compares to others in similar roles
-- **Growth Trajectory**: Development and improvement observed over time
-- **Recommendation Strength**: Explicit calibration (e.g., "Tier 1: Exceptional - highest recommendation without reservation")
-- **Additional Context**: Any relevant information not captured in student materials
-```
 
 ## Example of Good Extraction
 
