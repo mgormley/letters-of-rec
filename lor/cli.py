@@ -9,6 +9,7 @@ This CLI provides multiple subcommands for managing letters of recommendation:
 
 import logging
 import click
+import pathlib
 from dotenv import load_dotenv
 
 from lor.redact_student_info import process_all
@@ -94,8 +95,7 @@ def extract_style(redacted_letters_dir, output):
 
         lor extract-style data/redacted_letters/ --output custom_output/
     """
-    from pathlib import Path
-    extract_style_guide(Path(redacted_letters_dir), Path(output))
+    extract_style_guide(pathlib.Path(redacted_letters_dir), pathlib.Path(output))
 
 
 @cli.command()
@@ -141,15 +141,14 @@ def synthesize_packet(student_dir):
 
         lor synthesize-packet data/students/john_doe/
     """
-    from pathlib import Path
-    synthesize_student_packet(Path(student_dir))
+    synthesize_student_packet(pathlib.Path(student_dir))
 
 
 @cli.command()
 @click.argument('student_dir', type=click.Path(exists=True))
-@click.option('--style-guide', default='data/style_guide/style_guide.md', type=click.Path(exists=True), help='Path to style guide')
-@click.option('--output', default='letter_draft.md', help='Output filename (default: letter_draft.md)')
-def generate_letter_cmd(student_dir, style_guide, output):
+@click.option('--style-guide', type=click.Path(exists=True), help='Path to style guide')
+@click.option('--output', help='Output filename')
+def generate_letter_cmd(student_dir, style_guide='data/style_guide/style_guide.md', output='letter_draft.md'):
     """
     Generate letter of recommendation for a student.
 
@@ -188,10 +187,9 @@ def generate_letter_cmd(student_dir, style_guide, output):
         # Custom output filename
         lor generate-letter data/students/jane_smith/ --output letter_stanford.md
     """
-    from pathlib import Path
 
-    student_path = Path(student_dir)
-    style_guide_path = Path(style_guide) if style_guide else None
+    student_path = pathlib.Path(student_dir)
+    style_guide_path = pathlib.Path(style_guide) if style_guide else None
 
     # Generate letter
     letter_path = generate_letter(
@@ -204,6 +202,54 @@ def generate_letter_cmd(student_dir, style_guide, output):
     docx_path = convert_markdown_to_docx(letter_path)
     logger.info(f"DOCX saved to: {docx_path}")
 
+
+@cli.command()
+@click.argument('student_dir', type=click.Path(exists=True))
+@click.option('--style-guide', type=click.Path(exists=True), help='Path to style guide')
+@click.option('--output', help='Output filename')
+def packet_and_letter(student_dir, style_guide='data/style_guide/style_guide.md', output='letter_draft.md'):
+    """
+    Synthesize student packet and generate letter in one command.
+
+    STUDENT_DIR should be a student-specific directory containing an 'input/'
+    subdirectory with the student's application materials and professor_notes.md.
+
+    This command combines 'synthesize-packet' and 'generate-letter' into a single
+    workflow, using all default settings.
+
+    The script will:
+    1. Synthesize student packet from application materials
+    2. Generate letter of recommendation using default style guide
+    3. Convert letter to DOCX format
+
+    Prerequisites:
+    - All input materials must be in student_dir/input/
+    - professor_notes.md must be completed (use templates/professor_notes.md)
+    - Style guide must exist at data/style_guide/style_guide.md
+
+    Examples:
+
+        lor packet-and-letter data/students/jane_smith/
+    """
+    student_path = pathlib.Path(student_dir)
+    
+    logger.info("Step 1: Synthesizing student packet...")
+    synthesize_student_packet(student_path)
+    
+    logger.info("\nStep 2: Generating letter of recommendation...")
+    style_guide_path = pathlib.Path(style_guide) if style_guide else None
+    
+    letter_path = generate_letter(
+        student_path,
+        style_guide_path=style_guide_path,
+        output_filename=output,
+    )
+    
+    logger.info("\nStep 3: Converting to DOCX format...")
+    docx_path = convert_markdown_to_docx(letter_path)
+    logger.info(f"DOCX saved to: {docx_path}")
+    
+    logger.info("\n✓ Complete! Packet and letter generated successfully.")
 
 if __name__ == '__main__':
     cli()
