@@ -47,7 +47,7 @@ def load_redacted_letters(md_files: List[Path]) -> str:
         letters.append(f"# Letter: {md_file.stem}\n\n{content}")
 
     combined = "\n\n" + "="*80 + "\n\n".join(letters)
-    logger.info(f"Loaded {len(md_files)} redacted letters ({len(combined)} characters)")
+    logger.info(f"Loaded {len(md_files)} redacted letters ({len(combined.split())} words)")
     return combined
 
 
@@ -105,7 +105,7 @@ def extract_style_guide(redacted_letters_dir: Path, output_dir: Path) -> None:
         f.write(style_guide)
 
     logger.info(f"Style guide saved to: {output_path}")
-    logger.info(f"Size: {len(style_guide)} characters")
+    logger.info(f"Size: {len(style_guide.split())} words")
     logger.info(f"\n{'='*60}")
     logger.info("Style extraction complete!")
     logger.info("Please review and edit the style guide to ensure accuracy.")

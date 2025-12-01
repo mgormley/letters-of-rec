@@ -106,7 +106,7 @@ Remember:
 - Current date: {datetime.now().strftime("%B %d, %Y")}
 """
 
-    logger.info(f"Combined prompt size: {len(full_prompt)} characters")
+    logger.info(f"Combined prompt size: {len(full_prompt.split())} words")
     return full_prompt
 
 
@@ -142,11 +142,11 @@ def generate_letter(
 
     logger.info(f"Loading style guide from: {style_guide_path}")
     style_guide = load_style_guide(style_guide_path)
-    logger.info(f"Style guide loaded ({len(style_guide)} characters)")
+    logger.info(f"Style guide loaded ({len(style_guide.split())} words)")
 
     logger.info(f"Loading student packet from: {student_dir / 'student_packet.md'}")
     student_packet = load_student_packet(student_dir)
-    logger.info(f"Student packet loaded ({len(student_packet)} characters)")
+    logger.info(f"Student packet loaded ({len(student_packet.split())} words)")
 
     # Combine for prompt
     full_prompt = combine_for_letter_generation(
@@ -189,7 +189,7 @@ def generate_letter(
         f.write(letter)
 
     logger.info(f"Letter saved to: {output_path}")
-    logger.info(f"Size: {len(letter)} characters ({len(letter.split())} words)")
+    logger.info(f"Size: {len(letter.split())} words")
 
     # Log completion with next steps
     logger.info(f"\n{'='*60}")

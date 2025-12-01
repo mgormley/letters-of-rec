@@ -105,7 +105,7 @@ def combine_materials_for_prompt(materials: Dict[str, str], prompt_template: str
 
     full_prompt = f"{prompt_template}\n\n{'='*80}\n\n# Student Materials\n{combined_materials}"
 
-    logger.info(f"Combined prompt size: {len(full_prompt)} characters")
+    logger.info(f"Combined prompt size: {len(full_prompt.split())} words")
     return full_prompt
 
 
@@ -170,7 +170,7 @@ def synthesize_student_packet(student_dir: Path) -> None:
     save_markdown(student_packet, output_path)
 
     logger.info(f"Student packet saved to: {output_path}")
-    logger.info(f"Size: {len(student_packet)} characters")
+    logger.info(f"Size: {len(student_packet.split())} words")
     logger.info(f"\n{'='*60}")
     logger.info("Student packet synthesis complete!")
     logger.info("Next steps:")
