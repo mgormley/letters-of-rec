@@ -21,36 +21,29 @@ from lor.file_utils import save_markdown, convert_docx_to_markdown, find_docx_fi
 
 logger = logging.getLogger(__name__)
 
+
+def load_redaction_prompt() -> str:
+    """Load the redaction prompt template from file."""
+    prompt_path = Path(__file__).parent.parent / "prompts" / "redact_student_info.md"
+    with open(prompt_path, 'r', encoding='utf-8') as f:
+        return f.read()
+
+
 class DocumentRedactor:
     """Handles document redaction using an LLM API."""
 
-    REDACTION_PROMPT = """You are a document redaction assistant. Your task is to identify and replace ALL student-identifying information with standardized placeholders.
+    def __init__(self):
+        """Initialize the redactor and load the prompt template."""
+        self.redaction_prompt = load_redaction_prompt()
 
-Replace the following with these exact placeholders:
-- Student names (full names, first names, last names) → [STUDENT_NAME]
-- Student ID numbers → [STUDENT_ID]
-- Student email addresses → [STUDENT_EMAIL]
-- Other personal identifiers (phone numbers, addresses, etc.) → [STUDENT_INFO]
-
-If there are multiple students, number the placeholders (e.g., [STUDENT_NAME_1], [STUDENT_NAME_2]).
-
-IMPORTANT:
-- Preserve ALL formatting, structure, line breaks, and markdown syntax exactly as written
-- Do NOT modify or redact professor names, course names, institution names, or general content
-- Only redact information that identifies specific students
-- Return ONLY the redacted document without any additional commentary or explanation
-
-Document to redact:
-
-"""
-    
     def redact_text(self, text: str) -> str:
         """Use an LLM to redact student information from text."""
         logger.info("Sending text to LLM for redaction...")
+        full_prompt = f"{self.redaction_prompt}\n\n{text}"
         redacted_text = call_llm(
             messages=[
                 {"role": "system", "content": "You are a precise document redaction assistant."},
-                {"role": "user", "content": self.REDACTION_PROMPT + text}
+                {"role": "user", "content": full_prompt}
             ]
         )
         logger.info("Successfully received redacted text from LLM")
