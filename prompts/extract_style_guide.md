@@ -38,7 +38,7 @@ Document the typical structure:
 - **Opening Paragraph Templates**:
   - How does the author typically open letters?
   - What information is included in the first paragraph?
-  - Typical length and structure
+  - Typical length (number of sentences) and structure
 
 - **Body Paragraph Organization**:
   - Typical number of body paragraphs
@@ -48,15 +48,13 @@ Document the typical structure:
     - Teaching assistant work
     - Research contributions
     - Personal qualities or soft skills
+  - Typical length (number of sentences) and structure
 
 - **Closing Paragraph Patterns**:
   - How does the author typically conclude?
   - How is recommendation strength communicated?
   - What contact information or offers are included?
-
-- **Length Guidelines**:
-  - Overall letter length (word count range)
-  - Typical length for each section
+  - Typical length (number of sentences)
 
 ### 3. Example Excerpts - Reusable Phrases
 
