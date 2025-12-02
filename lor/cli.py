@@ -146,9 +146,9 @@ def synthesize_packet(student_dir):
 
 @cli.command()
 @click.argument('student_dir', type=click.Path(exists=True))
-@click.option('--style-guide', type=click.Path(exists=True), help='Path to style guide')
-@click.option('--output', help='Output filename')
-def generate_letter_cmd(student_dir, style_guide='data/style_guide/style_guide.md', output='letter_draft.md'):
+@click.option('--style-guide', default='data/style_guide/style_guide.md', type=click.Path(exists=True), help='Path to style guide')
+@click.option('--output', default='letter_draft.md', help='Output filename')
+def generate_letter_cmd(student_dir, style_guide, output):
     """
     Generate letter of recommendation for a student.
 
@@ -187,17 +187,13 @@ def generate_letter_cmd(student_dir, style_guide='data/style_guide/style_guide.m
         # Custom output filename
         lor generate-letter data/students/jane_smith/ --output letter_stanford.md
     """
-
     student_path = pathlib.Path(student_dir)
-    style_guide_path = pathlib.Path(style_guide) if style_guide else None
-
     # Generate letter
     letter_path = generate_letter(
         student_path,
-        style_guide_path=style_guide_path,
+        style_guide_path=pathlib.Path(style_guide),
         output_filename=output
     )
-
     logger.info("\nConverting to DOCX format...")
     docx_path = convert_markdown_to_docx(letter_path)
     logger.info(f"DOCX saved to: {docx_path}")
@@ -205,9 +201,9 @@ def generate_letter_cmd(student_dir, style_guide='data/style_guide/style_guide.m
 
 @cli.command()
 @click.argument('student_dir', type=click.Path(exists=True))
-@click.option('--style-guide', type=click.Path(exists=True), help='Path to style guide')
-@click.option('--output', help='Output filename')
-def packet_and_letter(student_dir, style_guide='data/style_guide/style_guide.md', output='letter_draft.md'):
+@click.option('--style-guide', default='data/style_guide/style_guide.md', type=click.Path(exists=True), help='Path to style guide')
+@click.option('--output', default='letter_draft.md', help='Output filename')
+def packet_and_letter(student_dir, style_guide, output):
     """
     Synthesize student packet and generate letter in one command.
 
@@ -237,11 +233,10 @@ def packet_and_letter(student_dir, style_guide='data/style_guide/style_guide.md'
     synthesize_student_packet(student_path)
     
     logger.info("\nStep 2: Generating letter of recommendation...")
-    style_guide_path = pathlib.Path(style_guide) if style_guide else None
     
     letter_path = generate_letter(
         student_path,
-        style_guide_path=style_guide_path,
+        style_guide_path=pathlib.Path(style_guide),
         output_filename=output,
     )
     
