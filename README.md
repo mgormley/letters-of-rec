@@ -58,6 +58,14 @@ python3 -m lor.cli generate-letter data/students/jane_smith/
 # 4. Edit as needed and send!
 ```
 
+## Note: Single command for Phase 2 and Phase 3
+
+You can run both Phase 2's packet creation and Phase 3's letter generation with a single command:
+
+```bash
+python3 -m lor.cli packet-and-letter data/students/jane_smith/
+```
+
 **Note**: Test without API key: `python3 test_phase3_manual.py`
 
 ## Features
