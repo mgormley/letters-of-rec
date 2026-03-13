@@ -100,7 +100,7 @@ def extract_style(redacted_letters_dir, output):
 
 @cli.command()
 @click.argument('student_dir', type=click.Path(exists=True))
-def synthesize_packet(student_dir):
+def packet(student_dir):
     """
     Synthesize student packet from application materials.
 
@@ -148,7 +148,7 @@ def synthesize_packet(student_dir):
 @click.argument('student_dir', type=click.Path(exists=True))
 @click.option('--style-guide', default='data/style_guide/style_guide.md', type=click.Path(exists=True), help='Path to style guide')
 @click.option('--output', default='letter_draft.md', help='Output filename')
-def generate_letter_cmd(student_dir, style_guide, output):
+def letter(student_dir, style_guide, output):
     """
     Generate letter of recommendation for a student.
 

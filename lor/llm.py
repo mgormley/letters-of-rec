@@ -5,7 +5,7 @@ litellm.drop_params = True
 
 def call_llm(
     messages: list,
-    model: str = "gpt-5.1",
+    model: str = "gpt-5.2",
     temperature: float = 1.0,
 ) -> str:
     """Vendor-agnostic LLM call."""
